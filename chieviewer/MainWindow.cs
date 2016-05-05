@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using chieviewer.Api;
 using System.Xml.Serialization;
 using System.IO;
+using mshtml;
 
 namespace chieviewer
 {
@@ -28,28 +29,12 @@ namespace chieviewer
             {
                 brsArticle.DocumentText = await stream.ReadToEndAsync();
             }
-
-
+            await GetNewQuestionList(sender);
+            
+            
         }
 
-        // 新着一覧取得
-        private async void btnGetNewQuestionList_Click(object sender, EventArgs e)
-        {
-            ApiCommand api = new ApiGetNewQuestionList();
-            api.Timer.Start();
-            api.SetParam("output", "xml");
-            api.SetParam("condition", "open");
-            api.SetParam("start", "1");
-            api.SetParam("results", "20");
-            var result = await api.Send();
-            Api.getNewQuestionList.ResultSet newQuestions =
-                api.LoadResultSet(result) as Api.getNewQuestionList.ResultSet;
-            //Api.getNewQuestionList.ResultSet newQuestions = ChieArticleManager.LoadNewQuestionList(result);
-            UpdateListViewArticles(newQuestions);
-            api.Timer.Stop();
-            long timeMs = api.Timer.ElapsedMilliseconds;
-            statusStripMainText.Text = $"({timeMs}ms) 新着質問リストを取得しました。";
-        }
+
 
         // 一覧部分の更新
         private void UpdateListViewArticles(Api.getNewQuestionList.ResultSet resultSet)
@@ -100,6 +85,55 @@ namespace chieviewer
         private void statusStripMain_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
+        }
+
+        // 新着取得
+        private async void btnGetNew_Click(object sender, EventArgs e)
+        {
+            await GetNewQuestionList(sender);
+        }
+
+        public async Task GetNewQuestionList(object sender)
+        {
+            ApiCommand api = new ApiGetNewQuestionList();
+            api.Timer.Start();
+            api.SetParam("output", "xml");
+            api.SetParam("condition", "open");
+            api.SetParam("start", "1");
+            api.SetParam("results", "20");
+            var result = await api.Send();
+            Api.getNewQuestionList.ResultSet newQuestions =
+                api.LoadResultSet(result) as Api.getNewQuestionList.ResultSet;
+            //Api.getNewQuestionList.ResultSet newQuestions = ChieArticleManager.LoadNewQuestionList(result);
+            UpdateListViewArticles(newQuestions);
+            api.Timer.Stop();
+            long timeMs = api.Timer.ElapsedMilliseconds;
+            statusStripMainText.Text = $"({timeMs}ms) 新着質問リストを取得しました。";
+        }
+
+        private void contextMenuStripBrowser_Opened(object sender, EventArgs e)
+        {
+            // すべて選択
+            // brsArticle.Document.ExecCommand("SelectAll", false, null);
+            // コピー
+            // brsArticle.Document.ExecCommand("Copy", false, null);
+
+            // 文字列が選択されていなければ「コピー」を無効化する
+            IHTMLDocument2 htmlDocument = brsArticle.Document.DomDocument as IHTMLDocument2;
+            IHTMLSelectionObject currentSelection = htmlDocument.selection;
+            if(currentSelection != null)
+            {
+                IHTMLTxtRange range = currentSelection.createRange() as IHTMLTxtRange;
+                if(range.text == null)
+                {
+                    contextBrowserCopy.Enabled = false;
+                }
+                else
+                {
+                    contextBrowserCopy.Enabled = true;
+                }
+            }
+            
         }
     }
 }
