@@ -39,30 +39,32 @@
             this.colCategoryC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colUpdatedTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.brsArticle = new System.Windows.Forms.WebBrowser();
-            this.statusStripMain = new System.Windows.Forms.StatusStrip();
-            this.statusStripMainText = new System.Windows.Forms.ToolStripStatusLabel();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.brsArticle = new System.Windows.Forms.WebBrowser();
+            this.contextMenuStripBrowser = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextBrowserCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStripMain = new System.Windows.Forms.StatusStrip();
+            this.statusStripMainText = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ヘルプHToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chieViewerについてToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnGetNew = new System.Windows.Forms.ToolStripButton();
-            this.contextMenuStripBrowser = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.contextBrowserCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripTextBoxQuestionId = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripButtonMoveQuestionId = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.statusStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            this.contextMenuStripBrowser.SuspendLayout();
+            this.statusStripMain.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
-            this.contextMenuStripBrowser.SuspendLayout();
             this.SuspendLayout();
             // 
             // listViewArticles
@@ -130,38 +132,9 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer1_Panel2_Paint);
             this.splitContainer1.Size = new System.Drawing.Size(1270, 720);
             this.splitContainer1.SplitterDistance = 208;
             this.splitContainer1.TabIndex = 2;
-            // 
-            // brsArticle
-            // 
-            this.brsArticle.ContextMenuStrip = this.contextMenuStripBrowser;
-            this.brsArticle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.brsArticle.IsWebBrowserContextMenuEnabled = false;
-            this.brsArticle.Location = new System.Drawing.Point(0, 0);
-            this.brsArticle.MinimumSize = new System.Drawing.Size(20, 20);
-            this.brsArticle.Name = "brsArticle";
-            this.brsArticle.Size = new System.Drawing.Size(1054, 352);
-            this.brsArticle.TabIndex = 2;
-            // 
-            // statusStripMain
-            // 
-            this.statusStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.statusStripMainText});
-            this.statusStripMain.Location = new System.Drawing.Point(0, 769);
-            this.statusStripMain.Name = "statusStripMain";
-            this.statusStripMain.Size = new System.Drawing.Size(1270, 22);
-            this.statusStripMain.SizingGrip = false;
-            this.statusStripMain.TabIndex = 3;
-            this.statusStripMain.Text = "a";
-            this.statusStripMain.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.statusStripMain_ItemClicked);
-            // 
-            // statusStripMainText
-            // 
-            this.statusStripMainText.Name = "statusStripMainText";
-            this.statusStripMainText.Size = new System.Drawing.Size(0, 17);
             // 
             // treeView1
             // 
@@ -189,6 +162,47 @@
             this.splitContainer2.Size = new System.Drawing.Size(1058, 720);
             this.splitContainer2.SplitterDistance = 360;
             this.splitContainer2.TabIndex = 3;
+            // 
+            // brsArticle
+            // 
+            this.brsArticle.ContextMenuStrip = this.contextMenuStripBrowser;
+            this.brsArticle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.brsArticle.IsWebBrowserContextMenuEnabled = false;
+            this.brsArticle.Location = new System.Drawing.Point(0, 0);
+            this.brsArticle.MinimumSize = new System.Drawing.Size(20, 20);
+            this.brsArticle.Name = "brsArticle";
+            this.brsArticle.Size = new System.Drawing.Size(1054, 352);
+            this.brsArticle.TabIndex = 2;
+            // 
+            // contextMenuStripBrowser
+            // 
+            this.contextMenuStripBrowser.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextBrowserCopy});
+            this.contextMenuStripBrowser.Name = "contextMenuStripBrowser";
+            this.contextMenuStripBrowser.Size = new System.Drawing.Size(114, 26);
+            this.contextMenuStripBrowser.Opened += new System.EventHandler(this.contextMenuStripBrowser_Opened);
+            // 
+            // contextBrowserCopy
+            // 
+            this.contextBrowserCopy.Name = "contextBrowserCopy";
+            this.contextBrowserCopy.Size = new System.Drawing.Size(113, 22);
+            this.contextBrowserCopy.Text = "コピー(&C)";
+            // 
+            // statusStripMain
+            // 
+            this.statusStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusStripMainText});
+            this.statusStripMain.Location = new System.Drawing.Point(0, 769);
+            this.statusStripMain.Name = "statusStripMain";
+            this.statusStripMain.Size = new System.Drawing.Size(1270, 22);
+            this.statusStripMain.SizingGrip = false;
+            this.statusStripMain.TabIndex = 3;
+            this.statusStripMain.Text = "a";
+            // 
+            // statusStripMainText
+            // 
+            this.statusStripMainText.Name = "statusStripMainText";
+            this.statusStripMainText.Size = new System.Drawing.Size(0, 17);
             // 
             // menuStrip1
             // 
@@ -219,7 +233,9 @@
             this.toolStrip1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnGetNew});
+            this.btnGetNew,
+            this.toolStripTextBoxQuestionId,
+            this.toolStripButtonMoveQuestionId});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
@@ -229,6 +245,7 @@
             // 
             // btnGetNew
             // 
+            this.btnGetNew.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btnGetNew.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.btnGetNew.Image = ((System.Drawing.Image)(resources.GetObject("btnGetNew.Image")));
             this.btnGetNew.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -237,19 +254,20 @@
             this.btnGetNew.Text = "新着取得";
             this.btnGetNew.Click += new System.EventHandler(this.btnGetNew_Click);
             // 
-            // contextMenuStripBrowser
+            // toolStripTextBoxQuestionId
             // 
-            this.contextMenuStripBrowser.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.contextBrowserCopy});
-            this.contextMenuStripBrowser.Name = "contextMenuStripBrowser";
-            this.contextMenuStripBrowser.Size = new System.Drawing.Size(153, 48);
-            this.contextMenuStripBrowser.Opened += new System.EventHandler(this.contextMenuStripBrowser_Opened);
+            this.toolStripTextBoxQuestionId.Name = "toolStripTextBoxQuestionId";
+            this.toolStripTextBoxQuestionId.Size = new System.Drawing.Size(100, 25);
             // 
-            // contextBrowserCopy
+            // toolStripButtonMoveQuestionId
             // 
-            this.contextBrowserCopy.Name = "contextBrowserCopy";
-            this.contextBrowserCopy.Size = new System.Drawing.Size(152, 22);
-            this.contextBrowserCopy.Text = "コピー(&C)";
+            this.toolStripButtonMoveQuestionId.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonMoveQuestionId.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonMoveQuestionId.Image")));
+            this.toolStripButtonMoveQuestionId.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonMoveQuestionId.Name = "toolStripButtonMoveQuestionId";
+            this.toolStripButtonMoveQuestionId.Size = new System.Drawing.Size(35, 22);
+            this.toolStripButtonMoveQuestionId.Text = "移動";
+            this.toolStripButtonMoveQuestionId.Click += new System.EventHandler(this.toolStripButtonMoveQuestionId_Click);
             // 
             // MainWindow
             // 
@@ -268,17 +286,17 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.statusStripMain.ResumeLayout(false);
-            this.statusStripMain.PerformLayout();
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            this.contextMenuStripBrowser.ResumeLayout(false);
+            this.statusStripMain.ResumeLayout(false);
+            this.statusStripMain.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            this.contextMenuStripBrowser.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -306,6 +324,8 @@
         private System.Windows.Forms.ToolStripButton btnGetNew;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripBrowser;
         private System.Windows.Forms.ToolStripMenuItem contextBrowserCopy;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBoxQuestionId;
+        private System.Windows.Forms.ToolStripButton toolStripButtonMoveQuestionId;
     }
 }
 
