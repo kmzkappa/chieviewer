@@ -79,17 +79,57 @@ namespace chieviewer
             GetCategoryTree(statusLabel);
         }
 
-        public async void GetCategoryTree(ToolStripStatusLabel statusLabel, string categoryId = null)
+        public async void GetCategoryTree(ToolStripStatusLabel statusLabel)
         {
             ApiCommand api = new ApiCategoryTreeResponse();
             api.Timer.Start();
 
-
+            // 大項目の取得
             var result = await api.Send();
-            Api.categoryTreeResponse.ResultSet treeItems =
+            Api.categoryTreeResponse.ResultSet level1Items =
                 api.LoadResultSet(result) as Api.categoryTreeResponse.ResultSet;
 
+            List<CategoryTreeModel> categoryTreeList = new List<CategoryTreeModel>();
 
+            foreach(var level1item in level1Items.Result)
+            {
+                CategoryTreeModel item1 = new CategoryTreeModel(level1item, 1);
+                categoryTreeList.Add(item1);
+
+                // レベル1のIDでレベル2を検索する
+                ApiCommand api2 = new ApiCategoryTreeResponse();
+                api2.SetParam("categoryid", item1.CategoryId);
+                var res2 = await api2.Send();
+                Api.categoryTreeResponse.ResultSet level2items =
+                    api.LoadResultSet(res2) as Api.categoryTreeResponse.ResultSet;
+
+                int cnt = 0;
+                foreach(var level2item in level2items.Result)
+                {
+                    // 1番目はレベル１相当のカテゴリ情報のため除外
+                    // TODO: IdPathの階層をみて判断すべき
+                    if (cnt++ == 0) continue;
+                    CategoryTreeModel item2 = new CategoryTreeModel(level2item, 2);
+                    categoryTreeList.Add(item2);
+
+                    // レベル２のIDでレベル３を検索する
+                    ApiCommand api3 = new ApiCategoryTreeResponse();
+                    api3.SetParam("categoryid", item2.CategoryId);
+                    var res3 = await api3.Send();
+                    Api.categoryTreeResponse.ResultSet level3items =
+                        api.LoadResultSet(res3) as Api.categoryTreeResponse.ResultSet;
+
+                    int cnt2 = 0;
+                    foreach(var level3item in level3items.Result)
+                    {
+                        if (cnt2++ == 0) continue;
+                        CategoryTreeModel item3 = new CategoryTreeModel(level3item, 3);
+                        categoryTreeList.Add(item3);
+                    }
+                }
+            }
+
+            
 
 
 

@@ -96,6 +96,7 @@
     <Compile Include="Api\categoryTreeResponse.cs" />
     <Compile Include="Api\detailSearchResponse.cs" />
     <Compile Include="Api\getNewQuestionList.cs" />
+    <Compile Include="CategoryTreeModel.cs" />
     <Compile Include="ChieUtil.cs" />
     <Compile Include="DataBase.cs" />
     <Compile Include="MainWindow.cs">
