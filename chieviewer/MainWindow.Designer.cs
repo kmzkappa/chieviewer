@@ -53,6 +53,7 @@
             this.btnGetNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripTextBoxQuestionId = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButtonMoveQuestionId = new System.Windows.Forms.ToolStripButton();
+            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -191,7 +192,8 @@
             // statusStripMain
             // 
             this.statusStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.statusStripMainText});
+            this.statusStripMainText,
+            this.toolStripProgressBar});
             this.statusStripMain.Location = new System.Drawing.Point(0, 769);
             this.statusStripMain.Name = "statusStripMain";
             this.statusStripMain.Size = new System.Drawing.Size(1270, 22);
@@ -202,7 +204,9 @@
             // statusStripMainText
             // 
             this.statusStripMainText.Name = "statusStripMainText";
-            this.statusStripMainText.Size = new System.Drawing.Size(0, 17);
+            this.statusStripMainText.Size = new System.Drawing.Size(1122, 17);
+            this.statusStripMainText.Spring = true;
+            this.statusStripMainText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // menuStrip1
             // 
@@ -269,6 +273,12 @@
             this.toolStripButtonMoveQuestionId.Text = "移動";
             this.toolStripButtonMoveQuestionId.Click += new System.EventHandler(this.toolStripButtonMoveQuestionId_Click);
             // 
+            // toolStripProgressBar
+            // 
+            this.toolStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripProgressBar.Name = "toolStripProgressBar";
+            this.toolStripProgressBar.Size = new System.Drawing.Size(100, 16);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -326,6 +336,7 @@
         private System.Windows.Forms.ToolStripMenuItem contextBrowserCopy;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBoxQuestionId;
         private System.Windows.Forms.ToolStripButton toolStripButtonMoveQuestionId;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
     }
 }
 

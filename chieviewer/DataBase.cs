@@ -53,9 +53,9 @@ namespace chieviewer
             }
         }
 
-        public async void InitCategoryTree(ToolStripStatusLabel statusLabel)
+        public async void InitCategoryTree(ToolStripStatusLabel statusLabel, ToolStripProgressBar progressBar)
         {
-            List<CategoryTreeModel> categoryList = await GetCategoryTree(statusLabel);
+            List<CategoryTreeModel> categoryList = await GetCategoryTree(statusLabel, progressBar);
 
             using (SQLiteConnection dbconn = new SQLiteConnection("data Source=" + DbFileName))
             {
@@ -68,6 +68,8 @@ namespace chieviewer
                         cmd.CommandText = "delete from category_tree where 1=1;";
                         cmd.ExecuteNonQuery();
                     }
+
+                    progressBar.Value = 95;
 
                     using(SQLiteCommand cmd = dbconn.CreateCommand())
                     {
@@ -89,9 +91,10 @@ namespace chieviewer
                     transaction.Commit();
                 }
             }
+            progressBar.Value = 100;
         }
 
-        public async Task<List<CategoryTreeModel>> GetCategoryTree(ToolStripStatusLabel statusLabel)
+        public async Task<List<CategoryTreeModel>> GetCategoryTree(ToolStripStatusLabel statusLabel, ToolStripProgressBar progressBar)
         {
             ApiCommand api = new ApiCategoryTreeResponse();
             api.Timer.Start();
@@ -102,6 +105,9 @@ namespace chieviewer
                 api.LoadResultSet(result) as Api.categoryTreeResponse.ResultSet;
 
             List<CategoryTreeModel> categoryTreeList = new List<CategoryTreeModel>();
+
+            progressBar.Value = 5;
+            int step = 90 / level1Items.Result.Length;
 
             foreach(var level1item in level1Items.Result)
             {
@@ -142,6 +148,7 @@ namespace chieviewer
                         categoryTreeList.Add(item3);
                     }
                 }
+                progressBar.Value += step;
             }
 
             api.Timer.Stop();

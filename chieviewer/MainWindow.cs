@@ -30,11 +30,17 @@ namespace chieviewer
             DataBase db = new DataBase();
             if (!db.CheckDb())
             {
+                statusStripMainText.Text =
+                    "データベースが作成されていません。新規作成します。";
                 db.InitDb();
+                statusStripMainText.Text =
+                    "データベースを新規作成しました。";
             }
             if (db.IsEmptyCategoryTree())
             {
-                db.InitCategoryTree(statusStripMainText);
+                statusStripMainText.Text = "カテゴリツリーを取得しています";
+                db.InitCategoryTree(statusStripMainText, toolStripProgressBar);
+                toolStripProgressBar.Value = 0;
             }
             
 
