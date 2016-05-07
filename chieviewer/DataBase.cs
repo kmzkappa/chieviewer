@@ -53,8 +53,10 @@ namespace chieviewer
             }
         }
 
-        public void InitCategoryTree(ToolStripStatusLabel statusLabel)
+        public async void InitCategoryTree(ToolStripStatusLabel statusLabel)
         {
+            List<CategoryTreeModel> categoryList = await GetCategoryTree(statusLabel);
+
             using (SQLiteConnection dbconn = new SQLiteConnection("data Source=" + DbFileName))
             {
                 dbconn.Open();
@@ -66,20 +68,30 @@ namespace chieviewer
                         cmd.CommandText = "delete from category_tree where 1=1;";
                         cmd.ExecuteNonQuery();
                     }
+
+                    using(SQLiteCommand cmd = dbconn.CreateCommand())
+                    {
+                        foreach(var category in categoryList)
+                        {
+                            cmd.CommandText =
+                                "insert into category_tree(category_id, category_path, title, title_path, parent_id, level) ";
+                            cmd.CommandText +=
+                                "values (@CATEGORY_ID, @CATEGORY_PATH, @TITLE, @TITLE_PATH, @PARENT_ID, @LEVEL);";
+                            cmd.Parameters.Add(new SQLiteParameter("@CATEGORY_ID", category.CategoryId));
+                            cmd.Parameters.Add(new SQLiteParameter("@CATEGORY_PATH", category.CategoryPath));
+                            cmd.Parameters.Add(new SQLiteParameter("@TITLE", category.Title));
+                            cmd.Parameters.Add(new SQLiteParameter("@TITLE_PATH", category.TitlePath));
+                            cmd.Parameters.Add(new SQLiteParameter("@PARENT_ID", category.ParentId));
+                            cmd.Parameters.Add(new SQLiteParameter("@LEVEL", category.Level));
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
                     transaction.Commit();
-                    /*
-                     * placeholderを使う方法
-                     * cmd.CommandText = "insert into tablename(id, data) values (@ID, @DATA)";
-                     * cmd.Parameters.Add(new SQLiteParameter("@ID", 1));
-                     * cmd.Parameters.Add(new SQLiteParameter("@DATA", 1));
-                     * cmd.ExecuteNonQuery(); 
-                     */
                 }
             }
-            GetCategoryTree(statusLabel);
         }
 
-        public async void GetCategoryTree(ToolStripStatusLabel statusLabel)
+        public async Task<List<CategoryTreeModel>> GetCategoryTree(ToolStripStatusLabel statusLabel)
         {
             ApiCommand api = new ApiCategoryTreeResponse();
             api.Timer.Start();
@@ -94,6 +106,7 @@ namespace chieviewer
             foreach(var level1item in level1Items.Result)
             {
                 CategoryTreeModel item1 = new CategoryTreeModel(level1item, 1);
+                item1.ParentId = null;
                 categoryTreeList.Add(item1);
 
                 // レベル1のIDでレベル2を検索する
@@ -110,6 +123,7 @@ namespace chieviewer
                     // TODO: IdPathの階層をみて判断すべき
                     if (cnt++ == 0) continue;
                     CategoryTreeModel item2 = new CategoryTreeModel(level2item, 2);
+                    item2.ParentId = item1.CategoryId;
                     categoryTreeList.Add(item2);
 
                     // レベル２のIDでレベル３を検索する
@@ -124,18 +138,16 @@ namespace chieviewer
                     {
                         if (cnt2++ == 0) continue;
                         CategoryTreeModel item3 = new CategoryTreeModel(level3item, 3);
+                        item3.ParentId = item2.CategoryId;
                         categoryTreeList.Add(item3);
                     }
                 }
             }
 
-            
-
-
-
             api.Timer.Stop();
             long timeMs = api.Timer.ElapsedMilliseconds;
-            statusLabel.Text = $"({timeMs}ms) カテゴリツリーを更新しました。";
+            statusLabel.Text = $"({timeMs}ms) カテゴリツリーを取得しました。";
+            return categoryTreeList;
         }
     }
 }
