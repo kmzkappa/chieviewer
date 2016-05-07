@@ -55,7 +55,7 @@ namespace chieviewer
 
         public async void InitCategoryTree(ToolStripStatusLabel statusLabel, ToolStripProgressBar progressBar)
         {
-            List<CategoryTreeModel> categoryList = await GetCategoryTree(statusLabel, progressBar);
+            List<CategoryTreeModel> categoryList = await GetCategoryTreeApi(statusLabel, progressBar);
 
             using (SQLiteConnection dbconn = new SQLiteConnection("data Source=" + DbFileName))
             {
@@ -94,7 +94,7 @@ namespace chieviewer
             progressBar.Value = 100;
         }
 
-        public async Task<List<CategoryTreeModel>> GetCategoryTree(ToolStripStatusLabel statusLabel, ToolStripProgressBar progressBar)
+        public async Task<List<CategoryTreeModel>> GetCategoryTreeApi(ToolStripStatusLabel statusLabel, ToolStripProgressBar progressBar)
         {
             ApiCommand api = new ApiCategoryTreeResponse();
             api.Timer.Start();
@@ -155,6 +155,35 @@ namespace chieviewer
             long timeMs = api.Timer.ElapsedMilliseconds;
             statusLabel.Text = $"({timeMs}ms) カテゴリツリーを取得しました。";
             return categoryTreeList;
+        }
+
+        // DBからカテゴリ一覧を取得
+        public List<CategoryTreeModel> GetCategoryTree()
+        {
+            // TODO: 戻り値は参照渡しの方が良さそう
+            List<CategoryTreeModel> categoryList = new List<CategoryTreeModel>();
+
+            using (SQLiteConnection dbconn = new SQLiteConnection("data Source=" + DbFileName))
+            {
+                dbconn.Open();
+                using(SQLiteCommand cmd = dbconn.CreateCommand())
+                {
+                    cmd.CommandText = "select * from category_tree;";
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        CategoryTreeModel treeItem = new CategoryTreeModel();
+                        treeItem.CategoryId = reader["category_id"].ToString();
+                        treeItem.CategoryPath = reader["category_path"].ToString();
+                        treeItem.Title = reader["title"].ToString();
+                        treeItem.TitlePath = reader["title_path"].ToString();
+                        treeItem.ParentId = reader["parent_id"].ToString();
+                        treeItem.Level = int.Parse(reader["level"].ToString());
+                        categoryList.Add(treeItem);
+                    }
+                }
+            }
+            return categoryList;
         }
     }
 }

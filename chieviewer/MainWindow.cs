@@ -42,6 +42,9 @@ namespace chieviewer
                 db.InitCategoryTree(statusStripMainText, toolStripProgressBar);
                 toolStripProgressBar.Value = 0;
             }
+
+            // カテゴリツリー表示
+            UpdateCategoryTree();
             
 
             // その他初期化
@@ -136,6 +139,51 @@ namespace chieviewer
                 = ChieUtil.DecryptNickName(nickName);
         }
 
+        public void UpdateCategoryTree()
+        {
+            DataBase db = new DataBase();
+            List<CategoryTreeModel> categoryList = db.GetCategoryTree();
+
+            var query1 = from e in categoryList
+                         where e.Level == 1
+                         orderby e.CategoryId
+                         select e;
+
+            // level1 loop
+            foreach (var item in query1)
+            {
+                TreeNode level1item = new TreeNode();
+                level1item.Text = item.Title;
+                level1item.Name = item.CategoryId;
+
+
+                var queryLevel2items = categoryList
+                    .Where(e => e.Level == 2 && e.ParentId == level1item.Name);
+
+                // level2 loop
+                foreach(var queryL2item in queryLevel2items)
+                {
+                    TreeNode level2item = new TreeNode();
+                    level2item.Text = queryL2item.Title;
+                    level2item.Name = queryL2item.CategoryId;
+
+                    var queryLevel3items = categoryList
+                        .Where(e => e.Level == 3 && e.ParentId == level2item.Name);
+
+                    // level3 loop
+                    foreach(var queryl3item in queryLevel3items)
+                    {
+                        TreeNode level3item = new TreeNode();
+                        level3item.Text = queryl3item.Title;
+                        level3item.Name = queryl3item.CategoryId;
+
+                        level2item.Nodes.Add(level3item);
+                    }
+                    level1item.Nodes.Add(level2item);
+                }
+                categoryTree.Nodes.Add(level1item);
+            }
+        }
 
         /***********************************************************/
         /* 通信処理 */

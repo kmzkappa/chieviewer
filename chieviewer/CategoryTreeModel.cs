@@ -24,6 +24,7 @@ namespace chieviewer
             this.TitlePath = category.Path;
             this.Level = level;
         }
+        public CategoryTreeModel() { }
 
     }
 }

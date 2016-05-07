@@ -39,7 +39,7 @@
             this.colCategoryC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colUpdatedTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.categoryTree = new System.Windows.Forms.TreeView();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.brsArticle = new System.Windows.Forms.WebBrowser();
             this.contextMenuStripBrowser = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -128,7 +128,7 @@
             // 
             this.splitContainer1.Panel1.AutoScroll = true;
             this.splitContainer1.Panel1.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.splitContainer1.Panel1.Controls.Add(this.treeView1);
+            this.splitContainer1.Panel1.Controls.Add(this.categoryTree);
             // 
             // splitContainer1.Panel2
             // 
@@ -137,13 +137,13 @@
             this.splitContainer1.SplitterDistance = 208;
             this.splitContainer1.TabIndex = 2;
             // 
-            // treeView1
+            // categoryTree
             // 
-            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeView1.Location = new System.Drawing.Point(0, 0);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(204, 716);
-            this.treeView1.TabIndex = 0;
+            this.categoryTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.categoryTree.Location = new System.Drawing.Point(0, 0);
+            this.categoryTree.Name = "categoryTree";
+            this.categoryTree.Size = new System.Drawing.Size(204, 716);
+            this.categoryTree.TabIndex = 0;
             // 
             // splitContainer2
             // 
@@ -204,7 +204,7 @@
             // statusStripMainText
             // 
             this.statusStripMainText.Name = "statusStripMainText";
-            this.statusStripMainText.Size = new System.Drawing.Size(1122, 17);
+            this.statusStripMainText.Size = new System.Drawing.Size(1153, 17);
             this.statusStripMainText.Spring = true;
             this.statusStripMainText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -325,7 +325,7 @@
         private System.Windows.Forms.WebBrowser brsArticle;
         private System.Windows.Forms.StatusStrip statusStripMain;
         private System.Windows.Forms.ToolStripStatusLabel statusStripMainText;
-        private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.TreeView categoryTree;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem ヘルプHToolStripMenuItem;
