@@ -21,9 +21,10 @@ namespace chieviewer.Api
             int count = 0;
             do
             {
+                Console.WriteLine("GetList: Try({0}", count + 1);
                 res = await GetApiAsync(new Uri(url));
                 count++;
-            } while (res != null && count < 3);
+            } while (res == null && count < 3);
 
 
             //return await GetApiAsync(new Uri(url));

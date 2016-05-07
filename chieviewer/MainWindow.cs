@@ -23,9 +23,23 @@ namespace chieviewer
 
         private async void MainWindow_Load(object sender, EventArgs e)
         {
+            // 設定
             listViewArticles.FullRowSelect = true;
 
-            using (StreamReader stream = new StreamReader("../../template/default/article.html", Encoding.GetEncoding("UTF-8")))
+            // DB初期化
+            DataBase db = new DataBase();
+            if (!db.CheckDb())
+            {
+                db.InitDb();
+            }
+            if (db.IsEmptyCategoryTree())
+            {
+                db.InitCategoryTree(statusStripMainText);
+            }
+            
+
+            // その他初期化
+            using (StreamReader stream = new StreamReader("../../../template/default/article.html", Encoding.GetEncoding("UTF-8")))
             {
                 brsArticle.DocumentText = await stream.ReadToEndAsync();
             }

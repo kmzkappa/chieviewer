@@ -8,10 +8,10 @@ using System.Xml.Serialization;
 
 namespace chieviewer.Api
 {
-    class ApiDetailSearchResponse : ApiCommand
+    class ApiCategoryTreeResponse : ApiCommand
     {
         private static readonly string BaseUrl =
-            "http://chiebukuro.yahooapis.jp/Chiebukuro/V1/detailSearch";
+            "http://chiebukuro.yahooapis.jp/Chiebukuro/V1/categoryTree";
 
         public async override Task<string> Send()
         {
@@ -34,7 +34,7 @@ namespace chieviewer.Api
         public override void CheckUrlParams()
         {
             // 必須パラメータチェック
-            if (!urlParams.ContainsKey("question_id")) throw new ArgumentException();
+            // なし
 
             // このメソッドが実行されたことを記憶
             isValidParam = true;
@@ -43,8 +43,8 @@ namespace chieviewer.Api
         public override object LoadResultSet(string xml)
         {
             TextReader reader = new StringReader(xml);
-            XmlSerializer serializer = new XmlSerializer(typeof(detailSearchResponse.ResultSet));
-            detailSearchResponse.ResultSet articles = serializer.Deserialize(reader) as detailSearchResponse.ResultSet;
+            XmlSerializer serializer = new XmlSerializer(typeof(categoryTreeResponse.ResultSet));
+            categoryTreeResponse.ResultSet articles = serializer.Deserialize(reader) as categoryTreeResponse.ResultSet;
             return articles;
         }
     }
