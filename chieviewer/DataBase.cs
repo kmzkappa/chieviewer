@@ -94,6 +94,7 @@ namespace chieviewer
             progressBar.Value = 100;
         }
 
+        // APIを発行しカテゴリ一覧を取得する
         public async Task<List<CategoryTreeModel>> GetCategoryTreeApi(ToolStripStatusLabel statusLabel, ToolStripProgressBar progressBar)
         {
             ApiCommand api = new ApiCategoryTreeResponse();

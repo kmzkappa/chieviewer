@@ -34,10 +34,12 @@
             this.colId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colTitle = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colCoin = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colAnsCount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colCategoryA = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colCategoryB = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colCategoryC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colUpdatedTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colUpdatedDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.categoryTree = new System.Windows.Forms.TreeView();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -46,6 +48,7 @@
             this.contextBrowserCopy = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
             this.statusStripMainText = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ヘルプHToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chieViewerについてToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,7 +56,6 @@
             this.btnGetNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripTextBoxQuestionId = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButtonMoveQuestionId = new System.Windows.Forms.ToolStripButton();
-            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -74,15 +76,17 @@
             this.colId,
             this.colTitle,
             this.colCoin,
+            this.colAnsCount,
             this.colCategoryA,
             this.colCategoryB,
             this.colCategoryC,
-            this.colUpdatedTime});
+            this.colUpdatedDate,
+            this.colStatus});
             this.listViewArticles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewArticles.Location = new System.Drawing.Point(0, 0);
             this.listViewArticles.MultiSelect = false;
             this.listViewArticles.Name = "listViewArticles";
-            this.listViewArticles.Size = new System.Drawing.Size(1054, 356);
+            this.listViewArticles.Size = new System.Drawing.Size(1034, 356);
             this.listViewArticles.TabIndex = 1;
             this.listViewArticles.UseCompatibleStateImageBehavior = false;
             this.listViewArticles.View = System.Windows.Forms.View.Details;
@@ -91,31 +95,49 @@
             // colId
             // 
             this.colId.Text = "ID";
+            this.colId.Width = 5;
             // 
             // colTitle
             // 
             this.colTitle.Text = "記事";
-            this.colTitle.Width = 300;
+            this.colTitle.Width = 440;
             // 
             // colCoin
             // 
             this.colCoin.Text = "知恵コイン";
+            this.colCoin.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.colCoin.Width = 50;
+            // 
+            // colAnsCount
+            // 
+            this.colAnsCount.Text = "回答数";
+            this.colAnsCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.colAnsCount.Width = 43;
             // 
             // colCategoryA
             // 
             this.colCategoryA.Text = "大分類";
+            this.colCategoryA.Width = 130;
             // 
             // colCategoryB
             // 
             this.colCategoryB.Text = "中分類";
+            this.colCategoryB.Width = 100;
             // 
             // colCategoryC
             // 
             this.colCategoryC.Text = "小分類";
+            this.colCategoryC.Width = 90;
             // 
-            // colUpdatedTime
+            // colUpdatedDate
             // 
-            this.colUpdatedTime.Text = "更新日時";
+            this.colUpdatedDate.Text = "更新日時";
+            this.colUpdatedDate.Width = 102;
+            // 
+            // colStatus
+            // 
+            this.colStatus.Text = "状態";
+            this.colStatus.Width = 48;
             // 
             // splitContainer1
             // 
@@ -133,8 +155,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1270, 720);
-            this.splitContainer1.SplitterDistance = 208;
+            this.splitContainer1.Size = new System.Drawing.Size(1224, 720);
+            this.splitContainer1.SplitterDistance = 182;
             this.splitContainer1.TabIndex = 2;
             // 
             // categoryTree
@@ -142,7 +164,7 @@
             this.categoryTree.Dock = System.Windows.Forms.DockStyle.Fill;
             this.categoryTree.Location = new System.Drawing.Point(0, 0);
             this.categoryTree.Name = "categoryTree";
-            this.categoryTree.Size = new System.Drawing.Size(204, 716);
+            this.categoryTree.Size = new System.Drawing.Size(178, 716);
             this.categoryTree.TabIndex = 0;
             this.categoryTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.categoryTree_AfterSelect);
             // 
@@ -161,7 +183,7 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.brsArticle);
-            this.splitContainer2.Size = new System.Drawing.Size(1058, 720);
+            this.splitContainer2.Size = new System.Drawing.Size(1038, 720);
             this.splitContainer2.SplitterDistance = 360;
             this.splitContainer2.TabIndex = 3;
             // 
@@ -173,7 +195,7 @@
             this.brsArticle.Location = new System.Drawing.Point(0, 0);
             this.brsArticle.MinimumSize = new System.Drawing.Size(20, 20);
             this.brsArticle.Name = "brsArticle";
-            this.brsArticle.Size = new System.Drawing.Size(1054, 352);
+            this.brsArticle.Size = new System.Drawing.Size(1034, 352);
             this.brsArticle.TabIndex = 2;
             // 
             // contextMenuStripBrowser
@@ -197,7 +219,7 @@
             this.toolStripProgressBar});
             this.statusStripMain.Location = new System.Drawing.Point(0, 769);
             this.statusStripMain.Name = "statusStripMain";
-            this.statusStripMain.Size = new System.Drawing.Size(1270, 22);
+            this.statusStripMain.Size = new System.Drawing.Size(1224, 22);
             this.statusStripMain.SizingGrip = false;
             this.statusStripMain.TabIndex = 3;
             this.statusStripMain.Text = "a";
@@ -209,13 +231,19 @@
             this.statusStripMainText.Spring = true;
             this.statusStripMainText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // toolStripProgressBar
+            // 
+            this.toolStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripProgressBar.Name = "toolStripProgressBar";
+            this.toolStripProgressBar.Size = new System.Drawing.Size(100, 16);
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ヘルプHToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1270, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1224, 24);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -244,7 +272,7 @@
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.toolStrip1.Size = new System.Drawing.Size(1270, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1224, 25);
             this.toolStrip1.TabIndex = 5;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -274,21 +302,16 @@
             this.toolStripButtonMoveQuestionId.Text = "移動";
             this.toolStripButtonMoveQuestionId.Click += new System.EventHandler(this.toolStripButtonMoveQuestionId_Click);
             // 
-            // toolStripProgressBar
-            // 
-            this.toolStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripProgressBar.Name = "toolStripProgressBar";
-            this.toolStripProgressBar.Size = new System.Drawing.Size(100, 16);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1270, 791);
+            this.ClientSize = new System.Drawing.Size(1224, 791);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.statusStripMain);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainWindow";
             this.Text = "Chie Viewer";
@@ -321,7 +344,7 @@
         private System.Windows.Forms.ColumnHeader colCategoryA;
         private System.Windows.Forms.ColumnHeader colCategoryB;
         private System.Windows.Forms.ColumnHeader colCategoryC;
-        private System.Windows.Forms.ColumnHeader colUpdatedTime;
+        private System.Windows.Forms.ColumnHeader colUpdatedDate;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.WebBrowser brsArticle;
         private System.Windows.Forms.StatusStrip statusStripMain;
@@ -338,6 +361,8 @@
         private System.Windows.Forms.ToolStripTextBox toolStripTextBoxQuestionId;
         private System.Windows.Forms.ToolStripButton toolStripButtonMoveQuestionId;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
+        private System.Windows.Forms.ColumnHeader colStatus;
+        private System.Windows.Forms.ColumnHeader colAnsCount;
     }
 }
 

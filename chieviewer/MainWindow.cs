@@ -11,6 +11,7 @@ using chieviewer.Api;
 using System.Xml.Serialization;
 using System.IO;
 using mshtml;
+using System.Text.RegularExpressions;
 
 namespace chieviewer
 {
@@ -52,7 +53,7 @@ namespace chieviewer
             {
                 brsArticle.DocumentText = await stream.ReadToEndAsync();
             }
-            await GetNewQuestionList(sender);
+            //await GetNewQuestionList(sender);
             
             
         }
@@ -129,8 +130,42 @@ namespace chieviewer
             {
                 ListViewItem item = new ListViewItem(result.QuestionId);
                 item.SubItems.Add(result.Content);
+                // 知恵コイン
                 item.SubItems.Add(result.Coin);
-                //item.SubItems.Add(result.)
+                // 回答数
+                item.SubItems.Add(result.AnsCount);
+
+                string[] categories = result.CategoryPath.Split('|');
+                // 大項目
+                if (categories.Length >= 1) {
+                    item.SubItems.Add(categories[0]);
+                } else {
+                    item.SubItems.Add(" ");
+                }
+                // 中項目
+                if(categories.Length >= 2) {
+                    item.SubItems.Add(categories[1]);
+                } else {
+                    item.SubItems.Add(" ");
+                }
+                // 小項目
+                if(categories.Length >= 3) {
+                    item.SubItems.Add(categories[2]);
+                } else {
+                    item.SubItems.Add(" ");
+                }
+
+                // 更新日時
+                // "2016-05-08T02:06:25+09:00"
+                string ymd = Regex.Match(result.UpdatedDate, "^\\d{4}-\\d{2}-\\d{2}").Value;
+                ymd = ymd.Replace('-', '/');
+                string time = Regex.Match(result.UpdatedDate, "(?<=T)\\d{2}:\\d{2}").Value;
+                item.SubItems.Add(ymd + " " + time);
+
+                // 状態
+                item.SubItems.Add("受付中");
+
+
                 listViewArticles.Items.Add(item);
             }
         }
@@ -148,6 +183,13 @@ namespace chieviewer
 
         public void UpdateCategoryTree()
         {
+            // 先頭に「全てのカテゴリ」を追加する
+            TreeNode allCategory = new TreeNode();
+            allCategory.Text = "全てのカテゴリ";
+            allCategory.Name = null;
+            categoryTree.Nodes.Add(allCategory);
+
+            // 大項目～小項目まで順に追加
             DataBase db = new DataBase();
             List<CategoryTreeModel> categoryList = db.GetCategoryTree();
 
