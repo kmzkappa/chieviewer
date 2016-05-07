@@ -74,6 +74,9 @@ namespace chieviewer
             string questionId = ((ListView)sender).SelectedItems[0].Text;
 
             await GetArticleDetail(questionId);
+
+            await Task.Delay(500);
+            toolStripProgressBar.Value = 0;
         }
 
         private void contextMenuStripBrowser_Opened(object sender, EventArgs e)
@@ -114,8 +117,13 @@ namespace chieviewer
         // カテゴリツリー選択時
         private async void categoryTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            toolStripProgressBar.Value = 21;
+            toolStripProgressBar.Value = 20;
             string categoryId = categoryTree.SelectedNode.Name;
             await GetNewQuestionList(sender, categoryId);
+
+            await Task.Delay(500);
+            toolStripProgressBar.Value = 0;
         }
 
         /***********************************************************/
@@ -172,7 +180,6 @@ namespace chieviewer
 
         private void UpdateBrowserDetail(Api.detailSearchResponse.ResultSet resultSet)
         {
-
             brsArticle.Document.GetElementById("contributor-content").InnerText
                 = resultSet.Result.Content;
 
@@ -238,7 +245,8 @@ namespace chieviewer
         /* 通信処理 */
         /***********************************************************/
 
-        public async Task GetArticleDetail(string questionId) { 
+        public async Task GetArticleDetail(string questionId) {
+            toolStripProgressBar.Value = 20;
             
             ApiCommand api = new ApiDetailSearchResponse();
             api.Timer.Start();
@@ -251,11 +259,19 @@ namespace chieviewer
             Api.detailSearchResponse.ResultSet detail =
                 api.LoadResultSet(result) as Api.detailSearchResponse.ResultSet;
 
+            toolStripProgressBar.Value = 61;
+            toolStripProgressBar.Value = 60;
+
+
             UpdateBrowserDetail(detail);
+
+            toolStripProgressBar.Value = 81;
+            toolStripProgressBar.Value = 80;
 
             api.Timer.Stop();
             long timeMs = api.Timer.ElapsedMilliseconds;
             statusStripMainText.Text = $"({timeMs}ms) 質問詳細を取得しました。";
+            toolStripProgressBar.Value = 100;
         }
 
 
@@ -272,11 +288,17 @@ namespace chieviewer
                 api.SetParam("category_id", categoryId);
             }
 
+            toolStripProgressBar.Value = 40;
+
             var result = await api.Send();
             Api.getNewQuestionList.ResultSet newQuestions =
                 api.LoadResultSet(result) as Api.getNewQuestionList.ResultSet;
             //Api.getNewQuestionList.ResultSet newQuestions = ChieArticleManager.LoadNewQuestionList(result);
+
+            toolStripProgressBar.Value = 80;
+
             UpdateListViewArticles(newQuestions);
+            toolStripProgressBar.Value = 100;
             api.Timer.Stop();
             long timeMs = api.Timer.ElapsedMilliseconds;
             statusStripMainText.Text = $"({timeMs}ms) 新着質問リストを取得しました。";
