@@ -144,6 +144,7 @@
             this.categoryTree.Name = "categoryTree";
             this.categoryTree.Size = new System.Drawing.Size(204, 716);
             this.categoryTree.TabIndex = 0;
+            this.categoryTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.categoryTree_AfterSelect);
             // 
             // splitContainer2
             // 

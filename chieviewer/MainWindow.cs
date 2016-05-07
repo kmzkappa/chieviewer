@@ -110,6 +110,12 @@ namespace chieviewer
 
         }
 
+        // カテゴリツリー選択時
+        private async void categoryTree_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            string categoryId = categoryTree.SelectedNode.Name;
+            await GetNewQuestionList(sender, categoryId);
+        }
 
         /***********************************************************/
         /* 画面更新処理 */
@@ -118,6 +124,7 @@ namespace chieviewer
         // 一覧部分の更新
         private void UpdateListViewArticles(Api.getNewQuestionList.ResultSet resultSet)
         {
+            listViewArticles.Items.Clear();
             foreach(var result in resultSet.Result)
             {
                 ListViewItem item = new ListViewItem(result.QuestionId);
@@ -210,7 +217,7 @@ namespace chieviewer
         }
 
 
-        public async Task GetNewQuestionList(object sender)
+        public async Task GetNewQuestionList(object sender, string categoryId = null)
         {
             ApiCommand api = new ApiGetNewQuestionList();
             api.Timer.Start();
@@ -218,6 +225,11 @@ namespace chieviewer
             api.SetParam("condition", "open");
             api.SetParam("start", "1");
             api.SetParam("results", "20");
+            if (!string.IsNullOrEmpty(categoryId))
+            {
+                api.SetParam("category_id", categoryId);
+            }
+
             var result = await api.Send();
             Api.getNewQuestionList.ResultSet newQuestions =
                 api.LoadResultSet(result) as Api.getNewQuestionList.ResultSet;
@@ -227,5 +239,7 @@ namespace chieviewer
             long timeMs = api.Timer.ElapsedMilliseconds;
             statusStripMainText.Text = $"({timeMs}ms) 新着質問リストを取得しました。";
         }
+
+
     }
 }
