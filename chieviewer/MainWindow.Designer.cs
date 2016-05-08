@@ -295,6 +295,7 @@
             this.btnGetNew.Name = "btnGetNew";
             this.btnGetNew.Size = new System.Drawing.Size(59, 22);
             this.btnGetNew.Text = "新着取得";
+            this.btnGetNew.ToolTipText = "選択したカテゴリの新着質問を取得します。";
             this.btnGetNew.Click += new System.EventHandler(this.btnGetNew_Click);
             // 
             // toolStripTextBoxQuestionId
@@ -353,6 +354,7 @@
             this.toolStripTextBoxSearchQuery.ToolTipText = "検索キーワード";
             this.toolStripTextBoxSearchQuery.Enter += new System.EventHandler(this.toolStripTextBoxSearchQuery_Enter);
             this.toolStripTextBoxSearchQuery.Leave += new System.EventHandler(this.toolStripTextBoxSearchQuery_Leave);
+            this.toolStripTextBoxSearchQuery.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripTextBoxSearchQuery_KeyPress);
             // 
             // toolStripButtonSearch
             // 

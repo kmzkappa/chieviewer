@@ -61,8 +61,6 @@ namespace chieviewer
             toolStripTextBoxSearchQuery.Text = "キーワード";
             toolStripTextBoxSearchQuery.ForeColor = Color.DarkGray;
 
-
-
         }
 
         /***********************************************************/
@@ -250,7 +248,6 @@ namespace chieviewer
             {
                 await GetSearchResultList(searchQuery);
             }
-
         }
 
 
@@ -289,6 +286,22 @@ namespace chieviewer
                 }
             }
             await GetNewQuestionList(sender, categoryId);
+        }
+
+        // 検索ボックスのEnterキー処理
+        private async void toolStripTextBoxSearchQuery_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if(e.KeyChar == (char)Keys.Enter)
+            {
+                // 検索実行
+                string searchQuery = toolStripTextBoxSearchQuery.Text;
+                if (toolStripTextBoxSearchQuery.ForeColor != Color.DarkGray
+                    && !string.IsNullOrEmpty(toolStripTextBoxSearchQuery.Text))
+                {
+                    e.Handled = true;
+                    await GetSearchResultList(searchQuery);
+                }
+            }
         }
 
 
