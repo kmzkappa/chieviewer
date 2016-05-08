@@ -245,7 +245,11 @@ namespace chieviewer
         {
             string searchQuery = toolStripTextBoxSearchQuery.Text;
 
-            await GetSearchResultList(searchQuery);
+            if (toolStripTextBoxSearchQuery.ForeColor != Color.DarkGray
+                && !string.IsNullOrEmpty(toolStripTextBoxSearchQuery.Text))
+            {
+                await GetSearchResultList(searchQuery);
+            }
 
         }
 
@@ -601,7 +605,7 @@ namespace chieviewer
             toolStripProgressBar.Value = 100;
         }
 
-
+        // 新着質問取得
         public async Task GetNewQuestionList(object sender, string categoryId = null)
         {
             ApiCommand api = new ApiGetNewQuestionList();
@@ -631,6 +635,7 @@ namespace chieviewer
             statusStripMainText.Text = $"({timeMs}ms) 新着質問リストを取得しました。";
         }
 
+        // 検索結果取得
         public async Task GetSearchResultList(string query, string categoryId = null)
         {
             ApiCommand api = new ApiQuestionSearchResponse();
