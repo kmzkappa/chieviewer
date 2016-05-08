@@ -95,10 +95,12 @@
     <Compile Include="Api\ApiCommand.cs" />
     <Compile Include="Api\ApiCategoryTreeResponse.cs" />
     <Compile Include="Api\ApiDetailSearchResponse.cs" />
+    <Compile Include="Api\ApiQuestionSearchResponse.cs" />
     <Compile Include="Api\ApiGetNewQuestionList.cs" />
     <Compile Include="Api\categoryTreeResponse.cs" />
     <Compile Include="Api\detailSearchResponse.cs" />
     <Compile Include="Api\getNewQuestionList.cs" />
+    <Compile Include="Api\questionSearchResponse.cs" />
     <Compile Include="CategoryTreeModel.cs" />
     <Compile Include="ChieUtil.cs" />
     <Compile Include="DataBase.cs" />

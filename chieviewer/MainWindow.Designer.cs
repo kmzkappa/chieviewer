@@ -104,7 +104,7 @@
             // 
             // colTitle
             // 
-            this.colTitle.Text = "記事";
+            this.colTitle.Text = "質問";
             this.colTitle.Width = 440;
             // 
             // colCoin
@@ -324,7 +324,6 @@
             this.toolStripComboBoxLevel1.Size = new System.Drawing.Size(150, 25);
             this.toolStripComboBoxLevel1.ToolTipText = "大分類";
             this.toolStripComboBoxLevel1.DropDownClosed += new System.EventHandler(this.toolStripComboBoxLevel1_DropDownClosed);
-            this.toolStripComboBoxLevel1.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxLevel1_SelectedIndexChanged);
             // 
             // toolStripComboBoxLevel2
             // 
@@ -335,7 +334,6 @@
             this.toolStripComboBoxLevel2.Size = new System.Drawing.Size(140, 25);
             this.toolStripComboBoxLevel2.ToolTipText = "中分類";
             this.toolStripComboBoxLevel2.DropDownClosed += new System.EventHandler(this.toolStripComboBoxLevel2_DropDownClosed);
-            this.toolStripComboBoxLevel2.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxLevel2_SelectedIndexChanged);
             // 
             // toolStripComboBoxLevel3
             // 
@@ -346,14 +344,15 @@
             this.toolStripComboBoxLevel3.Size = new System.Drawing.Size(130, 25);
             this.toolStripComboBoxLevel3.ToolTipText = "小分類";
             this.toolStripComboBoxLevel3.DropDownClosed += new System.EventHandler(this.toolStripComboBoxLevel3_DropDownClosed);
-            this.toolStripComboBoxLevel3.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxLevel3_SelectedIndexChanged);
             // 
             // toolStripTextBoxSearchQuery
             // 
-            this.toolStripTextBoxSearchQuery.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.toolStripTextBoxSearchQuery.ForeColor = System.Drawing.SystemColors.WindowText;
             this.toolStripTextBoxSearchQuery.Name = "toolStripTextBoxSearchQuery";
             this.toolStripTextBoxSearchQuery.Size = new System.Drawing.Size(100, 25);
             this.toolStripTextBoxSearchQuery.ToolTipText = "検索キーワード";
+            this.toolStripTextBoxSearchQuery.Enter += new System.EventHandler(this.toolStripTextBoxSearchQuery_Enter);
+            this.toolStripTextBoxSearchQuery.Leave += new System.EventHandler(this.toolStripTextBoxSearchQuery_Leave);
             // 
             // toolStripButtonSearch
             // 
@@ -363,6 +362,7 @@
             this.toolStripButtonSearch.Name = "toolStripButtonSearch";
             this.toolStripButtonSearch.Size = new System.Drawing.Size(35, 22);
             this.toolStripButtonSearch.Text = "検索";
+            this.toolStripButtonSearch.Click += new System.EventHandler(this.toolStripButtonSearch_Click);
             // 
             // MainWindow
             // 

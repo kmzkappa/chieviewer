@@ -43,7 +43,7 @@ namespace chieviewer
                 db.InitCategoryTree(statusStripMainText, toolStripProgressBar);
                 toolStripProgressBar.Value = 0;
             }
-
+            
             // カテゴリツリー表示
             UpdateCategoryTree();
 
@@ -58,8 +58,11 @@ namespace chieviewer
                 brsArticle.DocumentText = await stream.ReadToEndAsync();
             }
             //await GetNewQuestionList(sender);
-            
-            
+            toolStripTextBoxSearchQuery.Text = "キーワード";
+            toolStripTextBoxSearchQuery.ForeColor = Color.DarkGray;
+
+
+
         }
 
         /***********************************************************/
@@ -217,17 +220,35 @@ namespace chieviewer
             toolStripProgressBar.Value = 0;
         }
 
-        private void toolStripComboBoxLevel1_SelectedIndexChanged(object sender, EventArgs e)
+        // 検索キーワードボックス(enter)
+        private void toolStripTextBoxSearchQuery_Enter(object sender, EventArgs e)
         {
+            if(toolStripTextBoxSearchQuery.ForeColor == Color.DarkGray)
+            {
+                toolStripTextBoxSearchQuery.Text = "";
+                toolStripTextBoxSearchQuery.ForeColor = Color.Black;
+            }
         }
 
-        private void toolStripComboBoxLevel2_SelectedIndexChanged(object sender, EventArgs e)
+        // 検索キーワードボックス(leave)
+        private void toolStripTextBoxSearchQuery_Leave(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(toolStripTextBoxSearchQuery.Text))
+            {
+                toolStripTextBoxSearchQuery.ForeColor = Color.DarkGray;                
+                toolStripTextBoxSearchQuery.Text = "キーワード";
+            }
         }
 
-        private void toolStripComboBoxLevel3_SelectedIndexChanged(object sender, EventArgs e)
+        // 検索ボタン
+        private async void toolStripButtonSearch_Click(object sender, EventArgs e)
         {
+            string searchQuery = toolStripTextBoxSearchQuery.Text;
+
+            await GetSearchResultList(searchQuery);
+
         }
+
 
         // カテゴリ選択コンボ（大分類）選択時
         private async void toolStripComboBoxLevel1_DropDownClosed(object sender, EventArgs e)
@@ -271,7 +292,7 @@ namespace chieviewer
         /* 画面更新処理 */
         /***********************************************************/
 
-        // 一覧部分の更新
+        // 一覧部分の更新（新着記事用）
         private void UpdateListViewArticles(Api.getNewQuestionList.ResultSet resultSet)
         {
             listViewArticles.Items.Clear();
@@ -314,6 +335,89 @@ namespace chieviewer
                 // 状態
                 item.SubItems.Add("受付中");
 
+
+                listViewArticles.Items.Add(item);
+            }
+        }
+
+        // 一覧部分の更新（検索時用）
+        private void UpdateListViewArticles(Api.questionSearchResponse.ResultSet resultSet)
+        {
+            listViewArticles.Items.Clear();
+            foreach (var result in resultSet.Result)
+            {
+                ListViewItem item = new ListViewItem(result.Id);
+                item.SubItems.Add(result.Content);
+
+                // 知恵コイン
+                // TODO: APIで取得できない？
+                item.SubItems.Add("-");
+
+                // 回答数
+                item.SubItems.Add(result.AnsCount);
+
+                string[] categories = result.CategoryPath.Split('|');
+                // 大項目
+                if (categories.Length >= 1)
+                {
+                    item.SubItems.Add(categories[0]);
+                }
+                else
+                {
+                    item.SubItems.Add(" ");
+                }
+                // 中項目
+                if (categories.Length >= 2)
+                {
+                    item.SubItems.Add(categories[1]);
+                }
+                else
+                {
+                    item.SubItems.Add(" ");
+                }
+                // 小項目
+                if (categories.Length >= 3)
+                {
+                    item.SubItems.Add(categories[2]);
+                }
+                else
+                {
+                    item.SubItems.Add(" ");
+                }
+
+                // 更新日時
+                // "2016-05-08T02:06:25+09:00"
+                // 未解決の場合
+                if (string.IsNullOrEmpty(result.SolvedDate))
+                {
+                    string ymd = Regex.Match(result.PostedDate, "^\\d{4}-\\d{2}-\\d{2}").Value;
+                    ymd = ymd.Replace('-', '/');
+                    string time = Regex.Match(result.PostedDate, "(?<=T)\\d{2}:\\d{2}").Value;
+                    item.SubItems.Add(ymd + " " + time);
+                }
+                // 解決済みの場合
+                else
+                {
+                    string ymd = Regex.Match(result.SolvedDate, "^\\d{4}-\\d{2}-\\d{2}").Value;
+                    ymd = ymd.Replace('-', '/');
+                    string time = Regex.Match(result.SolvedDate, "(?<=T)\\d{2}:\\d{2}").Value;
+                    item.SubItems.Add(ymd + " " + time);
+                }
+
+                // 状態
+                string condition;
+                switch (result.Condition)
+                {
+                    case "open":
+                        condition = "受付中"; break;
+                    case "vote":
+                        condition = "投票中"; break;
+                    case "solved":
+                        condition = "解決済"; break;
+                    default:
+                        condition = " "; break;
+                }
+                item.SubItems.Add(condition);
 
                 listViewArticles.Items.Add(item);
             }
@@ -525,6 +629,35 @@ namespace chieviewer
             api.Timer.Stop();
             long timeMs = api.Timer.ElapsedMilliseconds;
             statusStripMainText.Text = $"({timeMs}ms) 新着質問リストを取得しました。";
+        }
+
+        public async Task GetSearchResultList(string query, string categoryId = null)
+        {
+            ApiCommand api = new ApiQuestionSearchResponse();
+            api.Timer.Start();
+            api.SetParam("query", query);
+            api.SetParam("type", "all");
+            if (!string.IsNullOrEmpty(categoryId)) api.SetParam("categoryid", categoryId);
+            api.SetParam("condition", "all");
+            api.SetParam("sort", "-posteddate");
+            api.SetParam("posteddevice", "all");
+            api.SetParam("results", "100");
+
+
+            toolStripProgressBar.Value = 40;
+
+            var result = await api.Send();
+            Api.questionSearchResponse.ResultSet questions =
+                api.LoadResultSet(result) as Api.questionSearchResponse.ResultSet;
+
+            toolStripProgressBar.Value = 80;
+
+            UpdateListViewArticles(questions);
+
+            toolStripProgressBar.Value = 100;
+            api.Timer.Stop();
+            long timeMs = api.Timer.ElapsedMilliseconds;
+            statusStripMainText.Text = $"({timeMs}ms) 検索結果を取得しました。";
         }
     }
 }
