@@ -317,29 +317,36 @@
             // 
             this.toolStripComboBoxLevel1.BackColor = System.Drawing.SystemColors.Window;
             this.toolStripComboBoxLevel1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBoxLevel1.DropDownWidth = 170;
             this.toolStripComboBoxLevel1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.toolStripComboBoxLevel1.MaxDropDownItems = 100;
             this.toolStripComboBoxLevel1.Name = "toolStripComboBoxLevel1";
-            this.toolStripComboBoxLevel1.Size = new System.Drawing.Size(121, 25);
+            this.toolStripComboBoxLevel1.Size = new System.Drawing.Size(150, 25);
             this.toolStripComboBoxLevel1.ToolTipText = "大分類";
+            this.toolStripComboBoxLevel1.DropDownClosed += new System.EventHandler(this.toolStripComboBoxLevel1_DropDownClosed);
             this.toolStripComboBoxLevel1.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxLevel1_SelectedIndexChanged);
             // 
             // toolStripComboBoxLevel2
             // 
             this.toolStripComboBoxLevel2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBoxLevel2.DropDownWidth = 150;
             this.toolStripComboBoxLevel2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.toolStripComboBoxLevel2.Name = "toolStripComboBoxLevel2";
-            this.toolStripComboBoxLevel2.Size = new System.Drawing.Size(121, 25);
+            this.toolStripComboBoxLevel2.Size = new System.Drawing.Size(140, 25);
             this.toolStripComboBoxLevel2.ToolTipText = "中分類";
+            this.toolStripComboBoxLevel2.DropDownClosed += new System.EventHandler(this.toolStripComboBoxLevel2_DropDownClosed);
             this.toolStripComboBoxLevel2.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxLevel2_SelectedIndexChanged);
             // 
             // toolStripComboBoxLevel3
             // 
             this.toolStripComboBoxLevel3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBoxLevel3.DropDownWidth = 140;
             this.toolStripComboBoxLevel3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.toolStripComboBoxLevel3.Name = "toolStripComboBoxLevel3";
-            this.toolStripComboBoxLevel3.Size = new System.Drawing.Size(121, 25);
+            this.toolStripComboBoxLevel3.Size = new System.Drawing.Size(130, 25);
             this.toolStripComboBoxLevel3.ToolTipText = "小分類";
+            this.toolStripComboBoxLevel3.DropDownClosed += new System.EventHandler(this.toolStripComboBoxLevel3_DropDownClosed);
+            this.toolStripComboBoxLevel3.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxLevel3_SelectedIndexChanged);
             // 
             // toolStripTextBoxSearchQuery
             // 

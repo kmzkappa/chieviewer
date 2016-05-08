@@ -125,8 +125,17 @@ namespace chieviewer
             // 記事一覧を更新する
             toolStripProgressBar.Value = 21;
             toolStripProgressBar.Value = 20;
+
             string categoryId = categoryTree.SelectedNode.Name;
-            await GetNewQuestionList(sender, categoryId);
+
+            try
+            {
+                await GetNewQuestionList(sender, categoryId);
+            } catch(NullReferenceException ex)
+            {
+                statusStripMainText.Text = "記事一覧の取得に失敗しました。";
+                Console.WriteLine(ex.InnerException);
+            }
 
             /* 以下、選択結果をコンボボックスに反映する */
             DataBase db = new DataBase();
@@ -208,19 +217,55 @@ namespace chieviewer
             toolStripProgressBar.Value = 0;
         }
 
-        // カテゴリ選択コンボ（大分類）選択時
         private void toolStripComboBoxLevel1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void toolStripComboBoxLevel2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void toolStripComboBoxLevel3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+        }
+
+        // カテゴリ選択コンボ（大分類）選択時
+        private async void toolStripComboBoxLevel1_DropDownClosed(object sender, EventArgs e)
         {
             string categoryId = ((CategoryTreeModel)toolStripComboBoxLevel1.SelectedItem).CategoryId;
             UpdateCategoryComboBox(2, categoryId);
+            await GetNewQuestionList(sender, categoryId);
         }
 
         // カテゴリ選択コンボ（中分類）選択時
-        private void toolStripComboBoxLevel2_SelectedIndexChanged(object sender, EventArgs e)
+        private async void toolStripComboBoxLevel2_DropDownClosed(object sender, EventArgs e)
         {
             string categoryId = ((CategoryTreeModel)toolStripComboBoxLevel2.SelectedItem).CategoryId;
+            // 「中分類」が選択された場合
+            if (string.IsNullOrEmpty(categoryId))
+            {
+                categoryId = ((CategoryTreeModel)toolStripComboBoxLevel1.SelectedItem).CategoryId;
+            }
             UpdateCategoryComboBox(3, categoryId);
+            await GetNewQuestionList(sender, categoryId);
         }
+
+        // カテゴリ選択コンボ（小分類）選択時
+        private async void toolStripComboBoxLevel3_DropDownClosed(object sender, EventArgs e)
+        {
+            string categoryId = ((CategoryTreeModel)toolStripComboBoxLevel3.SelectedItem).CategoryId;
+            // 「小分類」が選択された場合
+            if (string.IsNullOrEmpty(categoryId))
+            {
+                categoryId = ((CategoryTreeModel)toolStripComboBoxLevel2.SelectedItem).CategoryId;
+                if (string.IsNullOrEmpty(categoryId))
+                {
+                    categoryId = ((CategoryTreeModel)toolStripComboBoxLevel1.SelectedItem).CategoryId;
+                }
+            }
+            await GetNewQuestionList(sender, categoryId);
+        }
+
 
         /***********************************************************/
         /* 画面更新処理 */
@@ -481,7 +526,5 @@ namespace chieviewer
             long timeMs = api.Timer.ElapsedMilliseconds;
             statusStripMainText.Text = $"({timeMs}ms) 新着質問リストを取得しました。";
         }
-
-
     }
 }
