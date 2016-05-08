@@ -83,6 +83,7 @@ namespace chieviewer
             toolStripProgressBar.Value = 0;
         }
 
+        // ブラウザで右クリックしたとき
         private void contextMenuStripBrowser_Opened(object sender, EventArgs e)
         {
             // すべて選択
@@ -121,10 +122,87 @@ namespace chieviewer
         // カテゴリツリー選択時
         private async void categoryTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            // 記事一覧を更新する
             toolStripProgressBar.Value = 21;
             toolStripProgressBar.Value = 20;
             string categoryId = categoryTree.SelectedNode.Name;
             await GetNewQuestionList(sender, categoryId);
+
+            /* 以下、選択結果をコンボボックスに反映する */
+            DataBase db = new DataBase();
+            CategoryTreeModel selectedCategory =
+                db.GetCategoryTree().Where(item => item.CategoryId == categoryId).FirstOrDefault();
+
+            // 全てのカテゴリを選択した場合
+            if(selectedCategory == null)
+            {
+                toolStripComboBoxLevel2.Items.Clear();
+                toolStripComboBoxLevel2.Items.Add(new CategoryTreeModel("中分類"));
+                toolStripComboBoxLevel3.Items.Clear();
+                toolStripComboBoxLevel3.Items.Add(new CategoryTreeModel("小分類"));
+                toolStripComboBoxLevel1.SelectedIndex = 0;
+                toolStripComboBoxLevel2.SelectedIndex = 0;
+                toolStripComboBoxLevel3.SelectedIndex = 0;
+            }
+            // 有効なカテゴリを選択した場合
+            else
+            {
+                string selectedCategoryPath = selectedCategory.CategoryPath;
+                string[] categories = selectedCategoryPath.Split('|');
+                // カテゴリツリーから 大・中・小 分類を指定した場合
+                if(categories.Length >= 1)
+                {
+                    // 対応する大分類コンボを選択する
+                    var comboItems = toolStripComboBoxLevel1.Items;
+                    int cnt = 0;
+                    foreach(var item in comboItems)
+                    {
+                        if(((CategoryTreeModel)item).CategoryId == categories[0])
+                        {
+                            break;
+                        }
+                        cnt++;
+                    }
+                    toolStripComboBoxLevel1.SelectedIndex = cnt;
+                    // 中分類コンボを更新して先頭項目を選択
+                    UpdateCategoryComboBox(2, categories[0]);
+                }
+                // カテゴリツリーから 中・小 分類を指定した場合
+                if(categories.Length >= 2)
+                {
+                    // 中分類コンボを選択
+                    var comboItems2 = toolStripComboBoxLevel2.Items;
+                    int cnt2 = 0;
+                    foreach(var item in comboItems2)
+                    {
+                        if (((CategoryTreeModel)item).CategoryId == categories[1])
+                        {
+                            break;
+                        }
+                        cnt2++;
+                    }
+                    toolStripComboBoxLevel2.SelectedIndex = cnt2;
+
+                    // 小分類コンボを更新
+                    UpdateCategoryComboBox(3, categories[1]);
+                }
+                // カテゴリツリーから小分類を指定した場合
+                if(categories.Length >= 3)
+                {
+                    // 小分類コンボを選択
+                    var comboItems3 = toolStripComboBoxLevel3.Items;
+                    int cnt3 = 0;
+                    foreach (var item in comboItems3)
+                    {
+                        if (((CategoryTreeModel)item).CategoryId == categories[2])
+                        {
+                            break;
+                        }
+                        cnt3++;
+                    }
+                    toolStripComboBoxLevel3.SelectedIndex = cnt3;
+                }
+            }
 
             await Task.Delay(500);
             toolStripProgressBar.Value = 0;
@@ -310,7 +388,7 @@ namespace chieviewer
                 // 中分類を取得
                 var treeItems = db.GetCategoryTree()
                     .Where(item => item.Level == 2 && item.ParentId == categoryId);
-
+                //int size = treeItems.Count();
                 toolStripComboBoxLevel2.Items.Clear();
                 toolStripComboBoxLevel2.Items.Add(new CategoryTreeModel("中分類"));
                 toolStripComboBoxLevel2.Items.AddRange(treeItems.ToArray());
