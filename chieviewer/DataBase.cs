@@ -169,7 +169,7 @@ namespace chieviewer
                 dbconn.Open();
                 using(SQLiteCommand cmd = dbconn.CreateCommand())
                 {
-                    cmd.CommandText = "select * from category_tree;";
+                    cmd.CommandText = "select * from category_tree order by category_id asc;";
                     var reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
@@ -188,6 +188,3 @@ namespace chieviewer
         }
     }
 }
-
-//namespace chieviewer.Api.categoryTreeResponse
-// 

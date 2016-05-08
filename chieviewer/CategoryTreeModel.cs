@@ -25,6 +25,16 @@ namespace chieviewer
             this.Level = level;
         }
         public CategoryTreeModel() { }
+        public CategoryTreeModel(string title, string categoryId = null)
+        {
+            Title = title;
+            CategoryId = categoryId;
+        }
+
+        public override string ToString()
+        {
+            return Title;
+        }
 
     }
 }

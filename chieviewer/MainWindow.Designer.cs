@@ -56,6 +56,11 @@
             this.btnGetNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripTextBoxQuestionId = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButtonMoveQuestionId = new System.Windows.Forms.ToolStripButton();
+            this.toolStripComboBoxLevel1 = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripComboBoxLevel2 = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripComboBoxLevel3 = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripTextBoxSearchQuery = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripButtonSearch = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -227,7 +232,7 @@
             // statusStripMainText
             // 
             this.statusStripMainText.Name = "statusStripMainText";
-            this.statusStripMainText.Size = new System.Drawing.Size(1153, 17);
+            this.statusStripMainText.Size = new System.Drawing.Size(1107, 17);
             this.statusStripMainText.Spring = true;
             this.statusStripMainText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -268,7 +273,12 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnGetNew,
             this.toolStripTextBoxQuestionId,
-            this.toolStripButtonMoveQuestionId});
+            this.toolStripButtonMoveQuestionId,
+            this.toolStripComboBoxLevel1,
+            this.toolStripComboBoxLevel2,
+            this.toolStripComboBoxLevel3,
+            this.toolStripTextBoxSearchQuery,
+            this.toolStripButtonSearch});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
@@ -289,6 +299,7 @@
             // 
             // toolStripTextBoxQuestionId
             // 
+            this.toolStripTextBoxQuestionId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.toolStripTextBoxQuestionId.Name = "toolStripTextBoxQuestionId";
             this.toolStripTextBoxQuestionId.Size = new System.Drawing.Size(100, 25);
             // 
@@ -301,6 +312,50 @@
             this.toolStripButtonMoveQuestionId.Size = new System.Drawing.Size(35, 22);
             this.toolStripButtonMoveQuestionId.Text = "移動";
             this.toolStripButtonMoveQuestionId.Click += new System.EventHandler(this.toolStripButtonMoveQuestionId_Click);
+            // 
+            // toolStripComboBoxLevel1
+            // 
+            this.toolStripComboBoxLevel1.BackColor = System.Drawing.SystemColors.Window;
+            this.toolStripComboBoxLevel1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBoxLevel1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.toolStripComboBoxLevel1.MaxDropDownItems = 100;
+            this.toolStripComboBoxLevel1.Name = "toolStripComboBoxLevel1";
+            this.toolStripComboBoxLevel1.Size = new System.Drawing.Size(121, 25);
+            this.toolStripComboBoxLevel1.ToolTipText = "大分類";
+            this.toolStripComboBoxLevel1.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxLevel1_SelectedIndexChanged);
+            // 
+            // toolStripComboBoxLevel2
+            // 
+            this.toolStripComboBoxLevel2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBoxLevel2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.toolStripComboBoxLevel2.Name = "toolStripComboBoxLevel2";
+            this.toolStripComboBoxLevel2.Size = new System.Drawing.Size(121, 25);
+            this.toolStripComboBoxLevel2.ToolTipText = "中分類";
+            this.toolStripComboBoxLevel2.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxLevel2_SelectedIndexChanged);
+            // 
+            // toolStripComboBoxLevel3
+            // 
+            this.toolStripComboBoxLevel3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBoxLevel3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.toolStripComboBoxLevel3.Name = "toolStripComboBoxLevel3";
+            this.toolStripComboBoxLevel3.Size = new System.Drawing.Size(121, 25);
+            this.toolStripComboBoxLevel3.ToolTipText = "小分類";
+            // 
+            // toolStripTextBoxSearchQuery
+            // 
+            this.toolStripTextBoxSearchQuery.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.toolStripTextBoxSearchQuery.Name = "toolStripTextBoxSearchQuery";
+            this.toolStripTextBoxSearchQuery.Size = new System.Drawing.Size(100, 25);
+            this.toolStripTextBoxSearchQuery.ToolTipText = "検索キーワード";
+            // 
+            // toolStripButtonSearch
+            // 
+            this.toolStripButtonSearch.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonSearch.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSearch.Image")));
+            this.toolStripButtonSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSearch.Name = "toolStripButtonSearch";
+            this.toolStripButtonSearch.Size = new System.Drawing.Size(35, 22);
+            this.toolStripButtonSearch.Text = "検索";
             // 
             // MainWindow
             // 
@@ -363,6 +418,11 @@
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
         private System.Windows.Forms.ColumnHeader colStatus;
         private System.Windows.Forms.ColumnHeader colAnsCount;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboBoxLevel1;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboBoxLevel2;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboBoxLevel3;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBoxSearchQuery;
+        private System.Windows.Forms.ToolStripButton toolStripButtonSearch;
     }
 }
 

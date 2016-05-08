@@ -46,6 +46,10 @@ namespace chieviewer
 
             // カテゴリツリー表示
             UpdateCategoryTree();
+
+            // 検索用のカテゴリ項目初期化
+            UpdateCategoryComboBox(1, null);
+
             
 
             // その他初期化
@@ -126,6 +130,20 @@ namespace chieviewer
             toolStripProgressBar.Value = 0;
         }
 
+        // カテゴリ選択コンボ（大分類）選択時
+        private void toolStripComboBoxLevel1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string categoryId = ((CategoryTreeModel)toolStripComboBoxLevel1.SelectedItem).CategoryId;
+            UpdateCategoryComboBox(2, categoryId);
+        }
+
+        // カテゴリ選択コンボ（中分類）選択時
+        private void toolStripComboBoxLevel2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string categoryId = ((CategoryTreeModel)toolStripComboBoxLevel2.SelectedItem).CategoryId;
+            UpdateCategoryComboBox(3, categoryId);
+        }
+
         /***********************************************************/
         /* 画面更新処理 */
         /***********************************************************/
@@ -184,8 +202,17 @@ namespace chieviewer
                 = resultSet.Result.Content;
 
             string nickName = resultSet.Result.NickName;
-            brsArticle.Document.GetElementById("contributor-name").InnerText
-                = ChieUtil.DecryptNickName(nickName);
+            if (string.IsNullOrEmpty(nickName))
+            {
+                brsArticle.Document.GetElementById("contributor-name").InnerText
+                    = "ID非公開";
+            }
+            else
+            {
+                brsArticle.Document.GetElementById("contributor-name").InnerText
+                    = ChieUtil.DecryptNickName(nickName);
+            }
+
         }
 
         public void UpdateCategoryTree()
@@ -238,6 +265,79 @@ namespace chieviewer
                     level1item.Nodes.Add(level2item);
                 }
                 categoryTree.Nodes.Add(level1item);
+            }
+        }
+
+        public void UpdateCategoryComboBox(int level = 1, string categoryId = null)
+        {
+            // TODO: このあたりが雑
+
+            // level: 1, categoryId: null のとき、大項目一覧を更新する
+            if(level == 1 && string.IsNullOrEmpty(categoryId))
+            {
+                DataBase db = new DataBase();
+
+                toolStripComboBoxLevel1.Items.Clear();
+                toolStripComboBoxLevel2.Items.Clear();
+                toolStripComboBoxLevel3.Items.Clear();
+
+                var treeItems = db.GetCategoryTree().Where(item => item.Level == 1);
+                toolStripComboBoxLevel1.Items.Add(new CategoryTreeModel("大分類"));
+                toolStripComboBoxLevel1.Items.AddRange(treeItems.ToArray());
+                toolStripComboBoxLevel2.Items.Add(new CategoryTreeModel("中分類"));
+                toolStripComboBoxLevel3.Items.Add(new CategoryTreeModel("小分類"));
+
+
+                toolStripComboBoxLevel1.SelectedIndex = 0;
+                toolStripComboBoxLevel2.SelectedIndex = 0;
+                toolStripComboBoxLevel3.SelectedIndex = 0;
+            }
+            // 大分類が選択されたとき
+            // (「大分類」を選択したとき
+            else if(level == 2 && string.IsNullOrEmpty(categoryId))
+            {
+                toolStripComboBoxLevel2.Items.Clear();
+                toolStripComboBoxLevel2.Items.Add(new CategoryTreeModel("中分類"));
+                toolStripComboBoxLevel3.Items.Clear();
+                toolStripComboBoxLevel3.Items.Add(new CategoryTreeModel("小分類"));
+                toolStripComboBoxLevel2.SelectedIndex = 0;
+                toolStripComboBoxLevel3.SelectedIndex = 0;
+            }
+            // 大分類の有効な値を選択したとき
+            else if(level == 2)
+            {
+                DataBase db = new DataBase();
+                // 中分類を取得
+                var treeItems = db.GetCategoryTree()
+                    .Where(item => item.Level == 2 && item.ParentId == categoryId);
+
+                toolStripComboBoxLevel2.Items.Clear();
+                toolStripComboBoxLevel2.Items.Add(new CategoryTreeModel("中分類"));
+                toolStripComboBoxLevel2.Items.AddRange(treeItems.ToArray());
+                toolStripComboBoxLevel3.Items.Clear();
+                toolStripComboBoxLevel3.Items.Add(new CategoryTreeModel("小分類"));
+                toolStripComboBoxLevel2.SelectedIndex = 0;
+                toolStripComboBoxLevel3.SelectedIndex = 0;
+            }
+            // 中分類が選択されたとき
+            // (「中分類」を選択したとき)
+            else if(level == 3 && string.IsNullOrEmpty(categoryId))
+            {
+                toolStripComboBoxLevel3.Items.Clear();
+                toolStripComboBoxLevel3.Items.Add(new CategoryTreeModel("小分類"));
+                toolStripComboBoxLevel3.SelectedIndex = 0;
+            }
+            // 有効な中分類が選択されたとき
+            else if(level == 3)
+            {
+                toolStripComboBoxLevel3.Items.Clear();
+                toolStripComboBoxLevel3.Items.Add(new CategoryTreeModel("小分類"));
+                DataBase db = new DataBase();
+                // 小分類を取得
+                var treeItems = db.GetCategoryTree()
+                    .Where(item => item.Level == 3 && item.ParentId == categoryId);
+                toolStripComboBoxLevel3.Items.AddRange(treeItems.ToArray());
+                toolStripComboBoxLevel3.SelectedIndex = 0;
             }
         }
 
