@@ -60,6 +60,8 @@ namespace chieviewer
             //await GetNewQuestionList(sender);
             toolStripTextBoxSearchQuery.Text = "キーワード";
             toolStripTextBoxSearchQuery.ForeColor = Color.DarkGray;
+            toolStripTextBoxQuestionId.ForeColor = Color.DarkGray;
+            toolStripTextBoxQuestionId.Text = "URL/質問ID";
 
         }
 
@@ -113,11 +115,29 @@ namespace chieviewer
         // 移動ボタン
         private async void toolStripButtonMoveQuestionId_Click(object sender, EventArgs e)
         {
-            string questionId = toolStripTextBoxQuestionId.Text;
+
+            //string ymd = Regex.Match(result.UpdatedDate, "^\\d{4}-\\d{2}-\\d{2}").Value;
+            //http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q10159112045
+
+            string questionId = "";
+            string regexUrl = "^http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q\\d+$";
+            string regexQid = "^q?\\d+$";
+
+            if(Regex.IsMatch(toolStripTextBoxQuestionId.Text, regexUrl) ||
+                Regex.IsMatch(toolStripTextBoxQuestionId.Text, regexQid)){
+
+                questionId = Regex.Match(toolStripTextBoxQuestionId.Text, "\\d+$").Value;
+            }
+            else
+            {
+                statusStripMainText.Text = "指定された質問IDまたはURLが不正です。";
+                System.Media.SystemSounds.Beep.Play();
+                return;
+            }
+
             if (string.IsNullOrEmpty(questionId)) return;
 
             await GetArticleDetail(questionId);
-
         }
 
         // カテゴリツリー選択時
@@ -238,6 +258,26 @@ namespace chieviewer
             }
         }
 
+        // URLボックス(enter)
+        private void toolStripTextBoxQuestionId_Enter(object sender, EventArgs e)
+        {
+            if (toolStripTextBoxQuestionId.ForeColor == Color.DarkGray)
+            {
+                toolStripTextBoxQuestionId.Text = "";
+                toolStripTextBoxQuestionId.ForeColor = Color.Black;
+            }
+        }
+
+        // URLボックス(leave)
+        private void toolStripTextBoxQuestionId_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(toolStripTextBoxQuestionId.Text))
+            {
+                toolStripTextBoxQuestionId.ForeColor = Color.DarkGray;
+                toolStripTextBoxQuestionId.Text = "URL/質問ID";
+            }
+        }
+
         // 検索ボタン
         private async void toolStripButtonSearch_Click(object sender, EventArgs e)
         {
@@ -248,8 +288,35 @@ namespace chieviewer
             {
                 await GetSearchResultList(searchQuery);
             }
+            // 空白の場合
+            else
+            {
+                statusStripMainText.Text = "質問の検索にはキーワードの指定が必要です。";
+                System.Media.SystemSounds.Beep.Play();
+            }
         }
 
+        // 検索ボックスのEnterキー処理
+        private async void toolStripTextBoxSearchQuery_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                // 検索実行
+                string searchQuery = toolStripTextBoxSearchQuery.Text;
+                if (toolStripTextBoxSearchQuery.ForeColor != Color.DarkGray
+                    && !string.IsNullOrEmpty(toolStripTextBoxSearchQuery.Text))
+                {
+                    e.Handled = true;
+                    await GetSearchResultList(searchQuery);
+                }
+                // 空白の場合
+                else
+                {
+                    statusStripMainText.Text = "質問の検索にはキーワードの指定が必要です。";
+                    System.Media.SystemSounds.Beep.Play();
+                }
+            }
+        }
 
         // カテゴリ選択コンボ（大分類）選択時
         private async void toolStripComboBoxLevel1_DropDownClosed(object sender, EventArgs e)
@@ -287,23 +354,6 @@ namespace chieviewer
             }
             await GetNewQuestionList(sender, categoryId);
         }
-
-        // 検索ボックスのEnterキー処理
-        private async void toolStripTextBoxSearchQuery_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if(e.KeyChar == (char)Keys.Enter)
-            {
-                // 検索実行
-                string searchQuery = toolStripTextBoxSearchQuery.Text;
-                if (toolStripTextBoxSearchQuery.ForeColor != Color.DarkGray
-                    && !string.IsNullOrEmpty(toolStripTextBoxSearchQuery.Text))
-                {
-                    e.Handled = true;
-                    await GetSearchResultList(searchQuery);
-                }
-            }
-        }
-
 
         /***********************************************************/
         /* 画面更新処理 */
@@ -606,6 +656,8 @@ namespace chieviewer
             toolStripProgressBar.Value = 61;
             toolStripProgressBar.Value = 60;
 
+            toolStripTextBoxQuestionId.ForeColor = Color.Black;
+            toolStripTextBoxQuestionId.Text = detail.Result.PcQuestionUrl;
 
             UpdateBrowserDetail(detail);
 

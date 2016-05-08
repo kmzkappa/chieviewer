@@ -61,6 +61,8 @@
             this.toolStripComboBoxLevel3 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripTextBoxSearchQuery = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButtonSearch = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -272,8 +274,10 @@
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnGetNew,
+            this.toolStripSeparator2,
             this.toolStripTextBoxQuestionId,
             this.toolStripButtonMoveQuestionId,
+            this.toolStripSeparator1,
             this.toolStripComboBoxLevel1,
             this.toolStripComboBoxLevel2,
             this.toolStripComboBoxLevel3,
@@ -300,18 +304,21 @@
             // 
             // toolStripTextBoxQuestionId
             // 
-            this.toolStripTextBoxQuestionId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.toolStripTextBoxQuestionId.Name = "toolStripTextBoxQuestionId";
-            this.toolStripTextBoxQuestionId.Size = new System.Drawing.Size(100, 25);
+            this.toolStripTextBoxQuestionId.Size = new System.Drawing.Size(385, 25);
+            this.toolStripTextBoxQuestionId.Enter += new System.EventHandler(this.toolStripTextBoxQuestionId_Enter);
+            this.toolStripTextBoxQuestionId.Leave += new System.EventHandler(this.toolStripTextBoxQuestionId_Leave);
             // 
             // toolStripButtonMoveQuestionId
             // 
+            this.toolStripButtonMoveQuestionId.AutoToolTip = false;
             this.toolStripButtonMoveQuestionId.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripButtonMoveQuestionId.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonMoveQuestionId.Image")));
             this.toolStripButtonMoveQuestionId.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonMoveQuestionId.Margin = new System.Windows.Forms.Padding(3, 1, 3, 2);
             this.toolStripButtonMoveQuestionId.Name = "toolStripButtonMoveQuestionId";
             this.toolStripButtonMoveQuestionId.Size = new System.Drawing.Size(35, 22);
-            this.toolStripButtonMoveQuestionId.Text = "移動";
+            this.toolStripButtonMoveQuestionId.Text = "表示";
             this.toolStripButtonMoveQuestionId.Click += new System.EventHandler(this.toolStripButtonMoveQuestionId_Click);
             // 
             // toolStripComboBoxLevel1
@@ -320,6 +327,7 @@
             this.toolStripComboBoxLevel1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.toolStripComboBoxLevel1.DropDownWidth = 170;
             this.toolStripComboBoxLevel1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.toolStripComboBoxLevel1.Margin = new System.Windows.Forms.Padding(3, 0, 1, 0);
             this.toolStripComboBoxLevel1.MaxDropDownItems = 100;
             this.toolStripComboBoxLevel1.Name = "toolStripComboBoxLevel1";
             this.toolStripComboBoxLevel1.Size = new System.Drawing.Size(150, 25);
@@ -331,6 +339,7 @@
             this.toolStripComboBoxLevel2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.toolStripComboBoxLevel2.DropDownWidth = 150;
             this.toolStripComboBoxLevel2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.toolStripComboBoxLevel2.Margin = new System.Windows.Forms.Padding(3, 0, 1, 0);
             this.toolStripComboBoxLevel2.Name = "toolStripComboBoxLevel2";
             this.toolStripComboBoxLevel2.Size = new System.Drawing.Size(140, 25);
             this.toolStripComboBoxLevel2.ToolTipText = "中分類";
@@ -341,6 +350,7 @@
             this.toolStripComboBoxLevel3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.toolStripComboBoxLevel3.DropDownWidth = 140;
             this.toolStripComboBoxLevel3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.toolStripComboBoxLevel3.Margin = new System.Windows.Forms.Padding(3, 0, 1, 0);
             this.toolStripComboBoxLevel3.Name = "toolStripComboBoxLevel3";
             this.toolStripComboBoxLevel3.Size = new System.Drawing.Size(130, 25);
             this.toolStripComboBoxLevel3.ToolTipText = "小分類";
@@ -349,9 +359,10 @@
             // toolStripTextBoxSearchQuery
             // 
             this.toolStripTextBoxSearchQuery.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.toolStripTextBoxSearchQuery.Margin = new System.Windows.Forms.Padding(3, 0, 1, 0);
             this.toolStripTextBoxSearchQuery.Name = "toolStripTextBoxSearchQuery";
             this.toolStripTextBoxSearchQuery.Size = new System.Drawing.Size(100, 25);
-            this.toolStripTextBoxSearchQuery.ToolTipText = "検索キーワード";
+            this.toolStripTextBoxSearchQuery.ToolTipText = "検索キーワード(必須)";
             this.toolStripTextBoxSearchQuery.Enter += new System.EventHandler(this.toolStripTextBoxSearchQuery_Enter);
             this.toolStripTextBoxSearchQuery.Leave += new System.EventHandler(this.toolStripTextBoxSearchQuery_Leave);
             this.toolStripTextBoxSearchQuery.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripTextBoxSearchQuery_KeyPress);
@@ -361,10 +372,24 @@
             this.toolStripButtonSearch.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripButtonSearch.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSearch.Image")));
             this.toolStripButtonSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSearch.Margin = new System.Windows.Forms.Padding(3, 1, 0, 2);
             this.toolStripButtonSearch.Name = "toolStripButtonSearch";
             this.toolStripButtonSearch.Size = new System.Drawing.Size(35, 22);
             this.toolStripButtonSearch.Text = "検索";
+            this.toolStripButtonSearch.ToolTipText = "指定されたカテゴリ(大分類～小分類)およびキーワードに合致する質問を検索します。";
             this.toolStripButtonSearch.Click += new System.EventHandler(this.toolStripButtonSearch_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(2, 0, 3, 0);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // MainWindow
             // 
@@ -432,6 +457,8 @@
         private System.Windows.Forms.ToolStripComboBox toolStripComboBoxLevel3;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBoxSearchQuery;
         private System.Windows.Forms.ToolStripButton toolStripButtonSearch;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }
 
