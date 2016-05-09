@@ -69,10 +69,21 @@ namespace chieviewer
         /* フォーム・アクション */
         /***********************************************************/
 
-        // 新着取得
+        // 新着取得ボタン
         private async void btnGetNew_Click(object sender, EventArgs e)
         {
-            await GetNewQuestionList(sender);
+            string categoryId = "";
+            categoryId = ((CategoryTreeModel)toolStripComboBoxLevel3.SelectedItem).CategoryId;
+            if (string.IsNullOrEmpty(categoryId))
+            {
+                categoryId = ((CategoryTreeModel)toolStripComboBoxLevel2.SelectedItem).CategoryId;
+            }
+            if (string.IsNullOrEmpty(categoryId))
+            {
+                categoryId = ((CategoryTreeModel)toolStripComboBoxLevel1.SelectedItem).CategoryId;
+            }
+
+            await GetNewQuestionList(sender, categoryId);
         }
 
         // 記事リスト行が選択されたとき
@@ -286,7 +297,18 @@ namespace chieviewer
             if (toolStripTextBoxSearchQuery.ForeColor != Color.DarkGray
                 && !string.IsNullOrEmpty(toolStripTextBoxSearchQuery.Text))
             {
-                await GetSearchResultList(searchQuery);
+                string categoryId = "";
+                categoryId = ((CategoryTreeModel)toolStripComboBoxLevel3.SelectedItem).CategoryId;
+                if (string.IsNullOrEmpty(categoryId))
+                {
+                    categoryId = ((CategoryTreeModel)toolStripComboBoxLevel2.SelectedItem).CategoryId;
+                }
+                if (string.IsNullOrEmpty(categoryId))
+                {
+                    categoryId = ((CategoryTreeModel)toolStripComboBoxLevel1.SelectedItem).CategoryId;
+                }
+
+                await GetSearchResultList(searchQuery, categoryId);
             }
             // 空白の場合
             else
@@ -307,7 +329,18 @@ namespace chieviewer
                     && !string.IsNullOrEmpty(toolStripTextBoxSearchQuery.Text))
                 {
                     e.Handled = true;
-                    await GetSearchResultList(searchQuery);
+                    string categoryId = "";
+                    categoryId = ((CategoryTreeModel)toolStripComboBoxLevel3.SelectedItem).CategoryId;
+                    if (string.IsNullOrEmpty(categoryId))
+                    {
+                        categoryId = ((CategoryTreeModel)toolStripComboBoxLevel2.SelectedItem).CategoryId;
+                    }
+                    if (string.IsNullOrEmpty(categoryId))
+                    {
+                        categoryId = ((CategoryTreeModel)toolStripComboBoxLevel1.SelectedItem).CategoryId;
+                    }
+
+                    await GetSearchResultList(searchQuery, categoryId);
                 }
                 // 空白の場合
                 else

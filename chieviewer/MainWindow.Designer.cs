@@ -265,8 +265,8 @@
             // toolStripMenuItemVersionInfo
             // 
             this.toolStripMenuItemVersionInfo.Name = "toolStripMenuItemVersionInfo";
-            this.toolStripMenuItemVersionInfo.Size = new System.Drawing.Size(152, 22);
-            this.toolStripMenuItemVersionInfo.Text = "バージョン情報";
+            this.toolStripMenuItemVersionInfo.Size = new System.Drawing.Size(175, 22);
+            this.toolStripMenuItemVersionInfo.Text = "Chie Viewer について";
             this.toolStripMenuItemVersionInfo.Click += new System.EventHandler(this.toolStripMenuItemVersionInfo_Click);
             // 
             // toolStrip1
