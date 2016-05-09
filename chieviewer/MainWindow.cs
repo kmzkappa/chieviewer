@@ -170,7 +170,9 @@ namespace chieviewer
             try
             {
                 await GetNewQuestionList(sender, categoryId);
-            } catch(NullReferenceException ex)
+            }
+            // TODO: 不要
+            catch (NullReferenceException ex)
             {
                 statusStripMainText.Text = "記事一覧の取得に失敗しました。";
                 Console.WriteLine(ex.InnerException);
@@ -804,11 +806,21 @@ namespace chieviewer
 
             toolStripProgressBar.Value = 80;
 
-            UpdateListViewArticles(newQuestions);
+            if(newQuestions.totalResultsReturned != "0")
+            { 
+                UpdateListViewArticles(newQuestions);
+            }
             toolStripProgressBar.Value = 100;
             api.Timer.Stop();
             long timeMs = api.Timer.ElapsedMilliseconds;
-            statusStripMainText.Text = $"({timeMs}ms) 新着質問リストを取得しました。";
+            if (newQuestions.totalResultsReturned == "0")
+            {
+                statusStripMainText.Text = $"({timeMs}ms) 新着の質問はありません。";
+            }
+            else
+            {
+                statusStripMainText.Text = $"({timeMs}ms) 新着質問リストを取得しました。";
+            }
         }
 
         // 検索結果取得
