@@ -63,6 +63,9 @@ namespace chieviewer
             toolStripTextBoxQuestionId.ForeColor = Color.DarkGray;
             toolStripTextBoxQuestionId.Text = "URL/質問ID";
 
+
+            //toolStripButtonSearch.Font = new Font("FontAwesome", 9, FontStyle.Regular);
+
         }
 
         /***********************************************************/
@@ -154,6 +157,10 @@ namespace chieviewer
         // カテゴリツリー選択時
         private async void categoryTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            // ツリーを展開する
+            //e.Node.Toggle();
+
+
             // 記事一覧を更新する
             toolStripProgressBar.Value = 21;
             toolStripProgressBar.Value = 20;
@@ -388,6 +395,44 @@ namespace chieviewer
             await GetNewQuestionList(sender, categoryId);
         }
 
+        // カテゴリツリー（閉）をダブルクリックしたとき、開く→閉じる が発生しないよう抑制する
+        System.Diagnostics.Stopwatch expandTimer = new System.Diagnostics.Stopwatch();
+        // 展開時に（開）アイコンに変更
+        private void categoryTree_AfterExpand(object sender, TreeViewEventArgs e)
+        {
+            e.Node.ImageIndex = 1;
+            e.Node.SelectedImageIndex = 1;
+            expandTimer.Restart();
+        }
+        // 閉じる際に（閉）アイコンに変更
+        private void categoryTree_AfterCollapse(object sender, TreeViewEventArgs e)
+        {
+            e.Node.ImageIndex = 0;
+            e.Node.SelectedImageIndex = 0;
+        }
+        // カテゴリをシングルクリックで開く
+        private void categoryTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (!e.Node.IsExpanded)
+            {
+                e.Node.Expand();
+            }
+        }
+
+        // 一度オープンしたら、一定時間内はクリックしても閉じない
+        private void categoryTree_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
+        {
+            if (e.Node.IsExpanded && expandTimer.ElapsedMilliseconds > 400)
+            {
+                // noop
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+        }
+
+
         /***********************************************************/
         /* メニューバー */
         /***********************************************************/
@@ -602,6 +647,30 @@ namespace chieviewer
                 }
                 categoryTree.Nodes.Add(level1item);
             }
+
+            // 子ノードが存在しない要素のアイコンを変更する
+            foreach(TreeNode lv1 in categoryTree.Nodes)
+            {
+                if(lv1.GetNodeCount(false) == 0)
+                {
+                    lv1.ImageIndex = 2;
+                    lv1.SelectedImageIndex = 2;
+                }
+                foreach(TreeNode lv2 in lv1.Nodes)
+                {
+                    if (lv2.GetNodeCount(false) == 0)
+                    {
+                        lv2.ImageIndex = 2;
+                        lv2.SelectedImageIndex = 2;
+                    }
+                    foreach(TreeNode lv3 in lv2.Nodes)
+                    {
+                        lv3.ImageIndex = 2;
+                        lv3.SelectedImageIndex = 2;
+                    }
+                }
+            }
+
         }
 
         public void UpdateCategoryComboBox(int level = 1, string categoryId = null)

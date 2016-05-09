@@ -42,6 +42,7 @@
             this.colStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.categoryTree = new System.Windows.Forms.TreeView();
+            this.imageListCategory = new System.Windows.Forms.ImageList(this.components);
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.brsArticle = new System.Windows.Forms.WebBrowser();
             this.contextMenuStripBrowser = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -54,15 +55,15 @@
             this.toolStripMenuItemVersionInfo = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnGetNew = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripTextBoxQuestionId = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButtonMoveQuestionId = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripComboBoxLevel1 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripComboBoxLevel2 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripComboBoxLevel3 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripTextBoxSearchQuery = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButtonSearch = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -169,11 +170,27 @@
             // categoryTree
             // 
             this.categoryTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.categoryTree.ImageKey = "folder-c-small.png";
+            this.categoryTree.ImageList = this.imageListCategory;
             this.categoryTree.Location = new System.Drawing.Point(0, 0);
             this.categoryTree.Name = "categoryTree";
+            this.categoryTree.SelectedImageIndex = 0;
+            this.categoryTree.ShowPlusMinus = false;
             this.categoryTree.Size = new System.Drawing.Size(178, 716);
             this.categoryTree.TabIndex = 0;
+            this.categoryTree.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.categoryTree_BeforeCollapse);
+            this.categoryTree.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this.categoryTree_AfterCollapse);
+            this.categoryTree.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.categoryTree_AfterExpand);
             this.categoryTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.categoryTree_AfterSelect);
+            this.categoryTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.categoryTree_NodeMouseClick);
+            // 
+            // imageListCategory
+            // 
+            this.imageListCategory.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListCategory.ImageStream")));
+            this.imageListCategory.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageListCategory.Images.SetKeyName(0, "folder-c-small.png");
+            this.imageListCategory.Images.SetKeyName(1, "folder-o.png");
+            this.imageListCategory.Images.SetKeyName(2, "comment.png");
             // 
             // splitContainer2
             // 
@@ -303,6 +320,12 @@
             this.btnGetNew.ToolTipText = "選択したカテゴリの新着質問を取得します。";
             this.btnGetNew.Click += new System.EventHandler(this.btnGetNew_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
             // toolStripTextBoxQuestionId
             // 
             this.toolStripTextBoxQuestionId.Name = "toolStripTextBoxQuestionId";
@@ -321,6 +344,12 @@
             this.toolStripButtonMoveQuestionId.Size = new System.Drawing.Size(35, 22);
             this.toolStripButtonMoveQuestionId.Text = "表示";
             this.toolStripButtonMoveQuestionId.Click += new System.EventHandler(this.toolStripButtonMoveQuestionId_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(2, 0, 3, 0);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // toolStripComboBoxLevel1
             // 
@@ -379,18 +408,6 @@
             this.toolStripButtonSearch.Text = "検索";
             this.toolStripButtonSearch.ToolTipText = "指定されたカテゴリ(大分類～小分類)およびキーワードに合致する質問を検索します。";
             this.toolStripButtonSearch.Click += new System.EventHandler(this.toolStripButtonSearch_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(2, 0, 3, 0);
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // MainWindow
             // 
@@ -460,6 +477,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonSearch;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ImageList imageListCategory;
     }
 }
 
