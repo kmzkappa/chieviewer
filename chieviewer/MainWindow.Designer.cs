@@ -51,7 +51,7 @@
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ヘルプHToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.chieViewerについてToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemVersionInfo = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnGetNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripTextBoxQuestionId = new System.Windows.Forms.ToolStripTextBox();
@@ -257,16 +257,17 @@
             // ヘルプHToolStripMenuItem
             // 
             this.ヘルプHToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.chieViewerについてToolStripMenuItem});
+            this.toolStripMenuItemVersionInfo});
             this.ヘルプHToolStripMenuItem.Name = "ヘルプHToolStripMenuItem";
             this.ヘルプHToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.ヘルプHToolStripMenuItem.Text = "ヘルプ(&H)";
             // 
-            // chieViewerについてToolStripMenuItem
+            // toolStripMenuItemVersionInfo
             // 
-            this.chieViewerについてToolStripMenuItem.Name = "chieViewerについてToolStripMenuItem";
-            this.chieViewerについてToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
-            this.chieViewerについてToolStripMenuItem.Text = "ChieViewerについて";
+            this.toolStripMenuItemVersionInfo.Name = "toolStripMenuItemVersionInfo";
+            this.toolStripMenuItemVersionInfo.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItemVersionInfo.Text = "バージョン情報";
+            this.toolStripMenuItemVersionInfo.Click += new System.EventHandler(this.toolStripMenuItemVersionInfo_Click);
             // 
             // toolStrip1
             // 
@@ -442,7 +443,7 @@
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem ヘルプHToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem chieViewerについてToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemVersionInfo;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton btnGetNew;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripBrowser;

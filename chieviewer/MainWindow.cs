@@ -356,6 +356,15 @@ namespace chieviewer
         }
 
         /***********************************************************/
+        /* メニューバー */
+        /***********************************************************/
+        private void toolStripMenuItemVersionInfo_Click(object sender, EventArgs e)
+        {
+            VersionInfoForm form = new VersionInfoForm();
+            form.ShowDialog();
+        }
+
+        /***********************************************************/
         /* 画面更新処理 */
         /***********************************************************/
 
@@ -729,5 +738,7 @@ namespace chieviewer
             long timeMs = api.Timer.ElapsedMilliseconds;
             statusStripMainText.Text = $"({timeMs}ms) 検索結果を取得しました。";
         }
+
+
     }
 }
