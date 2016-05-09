@@ -22,50 +22,43 @@ namespace chieviewer
             InitializeComponent();
         }
 
-        private async void MainWindow_Load(object sender, EventArgs e)
+        private void MainWindow_Load(object sender, EventArgs e)
         {
             // 設定
-            listViewArticles.FullRowSelect = true;
-
-            // DB初期化
-            DataBase db = new DataBase();
-            if (!db.CheckDb())
-            {
-                statusStripMainText.Text =
-                    "データベースが作成されていません。新規作成します。";
-                db.InitDb();
-                statusStripMainText.Text =
-                    "データベースを新規作成しました。";
-            }
-            if (db.IsEmptyCategoryTree())
-            {
-                statusStripMainText.Text = "カテゴリツリーを取得しています";
-                db.InitCategoryTree(statusStripMainText, toolStripProgressBar);
-                toolStripProgressBar.Value = 0;
-            }
-            
-            // カテゴリツリー表示
-            UpdateCategoryTree();
-
-            // 検索用のカテゴリ項目初期化
-            UpdateCategoryComboBox(1, null);
-
-            
+            listViewArticles.FullRowSelect = true;         
 
             // その他初期化
             using (StreamReader stream = new StreamReader("../../../template/default/article.html", Encoding.GetEncoding("UTF-8")))
             {
-                brsArticle.DocumentText = await stream.ReadToEndAsync();
+                brsArticle.DocumentText = stream.ReadToEnd();
             }
             //await GetNewQuestionList(sender);
             toolStripTextBoxSearchQuery.Text = "キーワード";
             toolStripTextBoxSearchQuery.ForeColor = Color.DarkGray;
             toolStripTextBoxQuestionId.ForeColor = Color.DarkGray;
             toolStripTextBoxQuestionId.Text = "URL/質問ID";
-
-
             //toolStripButtonSearch.Font = new Font("FontAwesome", 9, FontStyle.Regular);
+        }
 
+        // MainWindow_Load完了後の処理
+        private void MainWindow_Shown(object sender, EventArgs e)
+        {
+
+            DataBase db = new DataBase();
+            if (db.CheckDb() && !db.IsEmptyCategoryTree())
+            {
+                // カテゴリツリー表示
+                UpdateCategoryTree();
+
+                // 検索用のカテゴリ項目初期化
+                UpdateCategoryComboBox(1, null);
+            }
+            else
+            {
+                // DB更新ダイアログ
+                CategoryTreeGetForm form = new CategoryTreeGetForm(this);
+                form.ShowDialog();
+            }
         }
 
         /***********************************************************/
@@ -853,6 +846,12 @@ namespace chieviewer
             statusStripMainText.Text = $"({timeMs}ms) 検索結果を取得しました。";
         }
 
-
+        /***********************************************************/
+        /* アクセサ */
+        /***********************************************************/
+        public ToolStripStatusLabel GetStatusLabel()
+        {
+            return statusStripMainText;
+        }
     }
 }

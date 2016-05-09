@@ -39,21 +39,29 @@ namespace chieviewer
 
         public bool IsEmptyCategoryTree()
         {
-            using (SQLiteConnection dbconn = new SQLiteConnection("data Source=" + DbFileName))
+            try
             {
-                int rowCount = -1;
-                dbconn.Open();
-                using (SQLiteCommand cmd = dbconn.CreateCommand())
+                using (SQLiteConnection dbconn = new SQLiteConnection("data Source=" + DbFileName))
                 {
-                    cmd.CommandText = "select count(1) from category_tree;";
-                    cmd.CommandType = System.Data.CommandType.Text;
-                    rowCount = Convert.ToInt32(cmd.ExecuteScalar());
+                    int rowCount = -1;
+                    dbconn.Open();
+                    using (SQLiteCommand cmd = dbconn.CreateCommand())
+                    {
+                        cmd.CommandText = "select count(1) from category_tree;";
+                        cmd.CommandType = System.Data.CommandType.Text;
+                        rowCount = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+                    return rowCount <= 0;
                 }
-                return rowCount <= 0;
+            }
+            catch(SQLiteException ex)
+            {
+                Console.WriteLine(ex.InnerException);
+                return true;
             }
         }
 
-        public async void InitCategoryTree(ToolStripStatusLabel statusLabel, ToolStripProgressBar progressBar)
+        public async Task InitCategoryTree(Label statusLabel, ProgressBar progressBar)
         {
             List<CategoryTreeModel> categoryList = await GetCategoryTreeApi(statusLabel, progressBar);
 
@@ -95,7 +103,7 @@ namespace chieviewer
         }
 
         // APIを発行しカテゴリ一覧を取得する
-        public async Task<List<CategoryTreeModel>> GetCategoryTreeApi(ToolStripStatusLabel statusLabel, ToolStripProgressBar progressBar)
+        public async Task<List<CategoryTreeModel>> GetCategoryTreeApi(Label statusLabel, ProgressBar progressBar)
         {
             ApiCommand api = new ApiCategoryTreeResponse();
             api.Timer.Start();
@@ -112,6 +120,8 @@ namespace chieviewer
 
             foreach(var level1item in level1Items.Result)
             {
+                statusLabel.Text = level1item.Title;
+
                 CategoryTreeModel item1 = new CategoryTreeModel(level1item, 1);
                 item1.ParentId = null;
                 categoryTreeList.Add(item1);

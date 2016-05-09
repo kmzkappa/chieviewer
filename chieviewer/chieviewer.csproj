@@ -104,6 +104,12 @@
     <Compile Include="Api\detailSearchResponse.cs" />
     <Compile Include="Api\getNewQuestionList.cs" />
     <Compile Include="Api\questionSearchResponse.cs" />
+    <Compile Include="CategoryTreeGetForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CategoryTreeGetForm.Designer.cs">
+      <DependentUpon>CategoryTreeGetForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CategoryTreeModel.cs" />
     <Compile Include="ChieUtil.cs" />
     <Compile Include="DataBase.cs" />
@@ -121,6 +127,9 @@
     <Compile Include="VersionInfoForm.Designer.cs">
       <DependentUpon>VersionInfoForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="CategoryTreeGetForm.resx">
+      <DependentUpon>CategoryTreeGetForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
