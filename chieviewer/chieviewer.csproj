@@ -113,6 +113,7 @@
     <Compile Include="CategoryTreeModel.cs" />
     <Compile Include="ChieUtil.cs" />
     <Compile Include="DataBase.cs" />
+    <Compile Include="DeepCopyUtils.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>

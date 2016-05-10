@@ -23,22 +23,35 @@ namespace chieviewer
             InitializeComponent();
         }
 
+        private List<WebBrowser> browsers;
+        private string htmlTemplate;
+
         private void MainWindow_Load(object sender, EventArgs e)
         {
             // 設定
             listViewArticles.FullRowSelect = true;         
 
             // その他初期化
-            using (StreamReader stream = new StreamReader("../../../template/default/article.html", Encoding.GetEncoding("UTF-8")))
-            {
-                brsArticle.DocumentText = stream.ReadToEnd();
-            }
             //await GetNewQuestionList(sender);
             toolStripTextBoxSearchQuery.Text = "キーワード";
             toolStripTextBoxSearchQuery.ForeColor = Color.DarkGray;
             toolStripTextBoxQuestionId.ForeColor = Color.DarkGray;
             toolStripTextBoxQuestionId.Text = "URL/質問ID";
             //toolStripButtonSearch.Font = new Font("FontAwesome", 9, FontStyle.Regular);
+
+            htmlTemplate = File.ReadAllText("../../../template/default/article.html", Encoding.GetEncoding("UTF-8"));
+
+            // ブラウザタブのオブジェクト生成とHTML代入のタイミングを分けるため
+            // 枠を2つ分用意しておく
+            // --> UpdateBrowserDetail
+            browsers = new List<WebBrowser>(2);
+            for(int i = 0; i < 2; i++)
+            {
+                WebBrowser browser = new WebBrowser();
+                browser.DocumentText = htmlTemplate;
+                browsers.Add(browser);
+            }
+
         }
 
         // MainWindow_Load完了後の処理
@@ -104,20 +117,20 @@ namespace chieviewer
 
             // 文字列が選択されていなければ「コピー」を無効化する
 
-            IHTMLDocument2 htmlDocument = brsArticle.Document.DomDocument as IHTMLDocument2;
-            IHTMLSelectionObject currentSelection = htmlDocument.selection;
-            if (currentSelection != null)
-            {
-                IHTMLTxtRange range = currentSelection.createRange() as IHTMLTxtRange;
-                if (range.text == null)
-                {
-                    contextBrowserCopy.Enabled = false;
-                }
-                else
-                {
-                    contextBrowserCopy.Enabled = true;
-                }
-            }
+            //IHTMLDocument2 htmlDocument = brsArticle.Document.DomDocument as IHTMLDocument2;
+            //IHTMLSelectionObject currentSelection = htmlDocument.selection;
+            //if (currentSelection != null)
+            //{
+            //    IHTMLTxtRange range = currentSelection.createRange() as IHTMLTxtRange;
+            //    if (range.text == null)
+            //    {
+            //        contextBrowserCopy.Enabled = false;
+            //    }
+            //    else
+            //    {
+            //        contextBrowserCopy.Enabled = true;
+            //    }
+            //}
         }
 
         // 移動ボタン
@@ -576,21 +589,37 @@ namespace chieviewer
 
         private void UpdateBrowserDetail(Api.detailSearchResponse.ResultSet resultSet)
         {
-            brsArticle.Document.GetElementById("contributor-content").InnerText
+            // タブ用
+            // WebBrowserの生成直後にDocumentTextの代入ができないため、
+            // new のタイミングと代入のタイミングを分ける
+            browsers[1].DocumentText = htmlTemplate;
+            WebBrowser browser = browsers[0];
+            browsers.RemoveAt(0);
+            browsers.Add(new WebBrowser());
+
+            browser.Document.GetElementById("contributor-content").InnerText
                 = resultSet.Result.Content;
 
             string nickName = resultSet.Result.NickName;
             if (string.IsNullOrEmpty(nickName))
             {
-                brsArticle.Document.GetElementById("contributor-name").InnerText
+                browser.Document.GetElementById("contributor-name").InnerText
                     = "ID非公開";
             }
             else
             {
-                brsArticle.Document.GetElementById("contributor-name").InnerText
+                browser.Document.GetElementById("contributor-name").InnerText
                     = ChieUtil.DecryptNickName(nickName);
             }
+            //tabBrowser.TabPages.Add(browser);
+            //tabBrowser.Container.Add(browser);
 
+            browser.Dock = DockStyle.Fill;
+            TabPage tab = new TabPage();
+            tab.Controls.Add(browser);
+            tabBrowser.TabPages.Add(tab);
+            // 追加したタブを表示
+            tabBrowser.SelectedIndex = tabBrowser.TabCount - 1;
         }
 
         public void UpdateCategoryTree()

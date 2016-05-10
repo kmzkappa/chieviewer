@@ -44,7 +44,6 @@
             this.categoryTree = new System.Windows.Forms.TreeView();
             this.imageListCategory = new System.Windows.Forms.ImageList(this.components);
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.brsArticle = new System.Windows.Forms.WebBrowser();
             this.contextMenuStripBrowser = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.contextBrowserCopy = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
@@ -64,6 +63,7 @@
             this.toolStripComboBoxLevel3 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripTextBoxSearchQuery = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButtonSearch = new System.Windows.Forms.ToolStripButton();
+            this.tabBrowser = new System.Windows.Forms.TabControl();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -95,7 +95,7 @@
             this.listViewArticles.MultiSelect = false;
             this.listViewArticles.Name = "listViewArticles";
             this.listViewArticles.ShowItemToolTips = true;
-            this.listViewArticles.Size = new System.Drawing.Size(1034, 356);
+            this.listViewArticles.Size = new System.Drawing.Size(1034, 302);
             this.listViewArticles.TabIndex = 1;
             this.listViewArticles.UseCompatibleStateImageBehavior = false;
             this.listViewArticles.View = System.Windows.Forms.View.Details;
@@ -207,21 +207,10 @@
             // 
             // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.brsArticle);
+            this.splitContainer2.Panel2.Controls.Add(this.tabBrowser);
             this.splitContainer2.Size = new System.Drawing.Size(1038, 720);
-            this.splitContainer2.SplitterDistance = 360;
+            this.splitContainer2.SplitterDistance = 306;
             this.splitContainer2.TabIndex = 3;
-            // 
-            // brsArticle
-            // 
-            this.brsArticle.ContextMenuStrip = this.contextMenuStripBrowser;
-            this.brsArticle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.brsArticle.IsWebBrowserContextMenuEnabled = false;
-            this.brsArticle.Location = new System.Drawing.Point(0, 0);
-            this.brsArticle.MinimumSize = new System.Drawing.Size(20, 20);
-            this.brsArticle.Name = "brsArticle";
-            this.brsArticle.Size = new System.Drawing.Size(1034, 352);
-            this.brsArticle.TabIndex = 2;
             // 
             // contextMenuStripBrowser
             // 
@@ -410,6 +399,15 @@
             this.toolStripButtonSearch.ToolTipText = "指定されたカテゴリ(大分類～小分類)およびキーワードに合致する質問を検索します。";
             this.toolStripButtonSearch.Click += new System.EventHandler(this.toolStripButtonSearch_Click);
             // 
+            // tabBrowser
+            // 
+            this.tabBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabBrowser.Location = new System.Drawing.Point(0, 0);
+            this.tabBrowser.Name = "tabBrowser";
+            this.tabBrowser.SelectedIndex = 0;
+            this.tabBrowser.Size = new System.Drawing.Size(1034, 406);
+            this.tabBrowser.TabIndex = 0;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -455,7 +453,6 @@
         private System.Windows.Forms.ColumnHeader colCategoryC;
         private System.Windows.Forms.ColumnHeader colUpdatedDate;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.WebBrowser brsArticle;
         private System.Windows.Forms.StatusStrip statusStripMain;
         private System.Windows.Forms.ToolStripStatusLabel statusStripMainText;
         private System.Windows.Forms.TreeView categoryTree;
@@ -480,6 +477,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ImageList imageListCategory;
+        private System.Windows.Forms.TabControl tabBrowser;
     }
 }
 
