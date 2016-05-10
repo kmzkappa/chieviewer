@@ -94,6 +94,7 @@
             this.listViewArticles.Location = new System.Drawing.Point(0, 0);
             this.listViewArticles.MultiSelect = false;
             this.listViewArticles.Name = "listViewArticles";
+            this.listViewArticles.ShowItemToolTips = true;
             this.listViewArticles.Size = new System.Drawing.Size(1034, 356);
             this.listViewArticles.TabIndex = 1;
             this.listViewArticles.UseCompatibleStateImageBehavior = false;
