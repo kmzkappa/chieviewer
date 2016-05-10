@@ -12,6 +12,7 @@ using System.Xml.Serialization;
 using System.IO;
 using mshtml;
 using System.Text.RegularExpressions;
+using System.Net;
 
 namespace chieviewer
 {
@@ -448,7 +449,8 @@ namespace chieviewer
             foreach(var result in resultSet.Result)
             {
                 ListViewItem item = new ListViewItem(result.QuestionId);
-                item.SubItems.Add(result.Content);
+
+                item.SubItems.Add(WebUtility.HtmlDecode(result.Content));
                 // 知恵コイン
                 item.SubItems.Add(result.Coin);
                 // 回答数
