@@ -107,31 +107,7 @@ namespace chieviewer
             toolStripProgressBar.Value = 0;
         }
 
-        // ブラウザで右クリックしたとき
-        private void contextMenuStripBrowser_Opened(object sender, EventArgs e)
-        {
-            // すべて選択
-            // brsArticle.Document.ExecCommand("SelectAll", false, null);
-            // コピー
-            // brsArticle.Document.ExecCommand("Copy", false, null);
 
-            // 文字列が選択されていなければ「コピー」を無効化する
-
-            //IHTMLDocument2 htmlDocument = brsArticle.Document.DomDocument as IHTMLDocument2;
-            //IHTMLSelectionObject currentSelection = htmlDocument.selection;
-            //if (currentSelection != null)
-            //{
-            //    IHTMLTxtRange range = currentSelection.createRange() as IHTMLTxtRange;
-            //    if (range.text == null)
-            //    {
-            //        contextBrowserCopy.Enabled = false;
-            //    }
-            //    else
-            //    {
-            //        contextBrowserCopy.Enabled = true;
-            //    }
-            //}
-        }
 
         // 移動ボタン
         private async void toolStripButtonMoveQuestionId_Click(object sender, EventArgs e)
@@ -441,6 +417,11 @@ namespace chieviewer
             }
         }
 
+        // タブ部分のマウス処理
+        private void tabBrowser_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
 
         /***********************************************************/
         /* メニューバー */
@@ -611,16 +592,61 @@ namespace chieviewer
                 browser.Document.GetElementById("contributor-name").InnerText
                     = ChieUtil.DecryptNickName(nickName);
             }
-            //tabBrowser.TabPages.Add(browser);
-            //tabBrowser.Container.Add(browser);
 
             browser.Dock = DockStyle.Fill;
+            //browser.AllowWebBrowserDrop = false;
+            browser.IsWebBrowserContextMenuEnabled = false;
+            browser.ContextMenuStrip = contextMenuStripBrowser;
+
+            // ブラウザ部分の右クリックメニューを設定
+            browser.ContextMenuStrip.Opened += new EventHandler(contextMenuStripBrowser_Opened);
+
             TabPage tab = new TabPage();
+            // 質問ID
+            tab.Tag = resultSet.Result.QuestionId;
+            tab.Text = resultSet.Result.Title.Substring(0, 8);
             tab.Controls.Add(browser);
             tabBrowser.TabPages.Add(tab);
             // 追加したタブを表示
             tabBrowser.SelectedIndex = tabBrowser.TabCount - 1;
+            
         }
+
+        // ブラウザの右クリックメニュー
+        // UpdateBrowserDetail内でイベントを追加している
+        private void contextMenuStripBrowser_Opened(object sender, EventArgs e)
+        {
+            WebBrowser browser = ((ContextMenuStrip)sender).SourceControl as WebBrowser;
+
+            // すべて選択
+            //brsArticle.Document.ExecCommand("SelectAll", false, null);
+            // コピー
+            //browser.Document.ExecCommand("Copy", false, null);
+
+            // 文字列が選択されていなければ「コピー」を無効化する
+            IHTMLDocument2 htmlDocument = browser.Document.DomDocument as IHTMLDocument2;
+            IHTMLSelectionObject currentSelection = htmlDocument.selection;
+            if (currentSelection != null)
+            {
+                IHTMLTxtRange range = currentSelection.createRange() as IHTMLTxtRange;
+                if (range.text == null)
+                {
+                    contextBrowserCopy.Enabled = false;
+                }
+                else
+                {
+                    contextBrowserCopy.Enabled = true;
+                }
+            }
+        }
+
+        private void contextBrowserCopy_Click(object sender, EventArgs e)
+        {
+            ContextMenuStrip strip = ((ToolStripMenuItem)sender).Owner as ContextMenuStrip;
+            WebBrowser browser = strip.SourceControl as WebBrowser;
+            browser.Document.ExecCommand("Copy", false, null);
+        }
+
 
         public void UpdateCategoryTree()
         {
@@ -884,5 +910,7 @@ namespace chieviewer
         {
             return statusStripMainText;
         }
+
+
     }
 }

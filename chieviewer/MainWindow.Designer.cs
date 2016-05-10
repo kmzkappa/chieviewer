@@ -217,14 +217,15 @@
             this.contextMenuStripBrowser.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.contextBrowserCopy});
             this.contextMenuStripBrowser.Name = "contextMenuStripBrowser";
-            this.contextMenuStripBrowser.Size = new System.Drawing.Size(114, 26);
+            this.contextMenuStripBrowser.Size = new System.Drawing.Size(153, 48);
             this.contextMenuStripBrowser.Opened += new System.EventHandler(this.contextMenuStripBrowser_Opened);
             // 
             // contextBrowserCopy
             // 
             this.contextBrowserCopy.Name = "contextBrowserCopy";
-            this.contextBrowserCopy.Size = new System.Drawing.Size(113, 22);
+            this.contextBrowserCopy.Size = new System.Drawing.Size(152, 22);
             this.contextBrowserCopy.Text = "コピー(&C)";
+            this.contextBrowserCopy.Click += new System.EventHandler(this.contextBrowserCopy_Click);
             // 
             // statusStripMain
             // 
@@ -407,6 +408,7 @@
             this.tabBrowser.SelectedIndex = 0;
             this.tabBrowser.Size = new System.Drawing.Size(1034, 406);
             this.tabBrowser.TabIndex = 0;
+            this.tabBrowser.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tabBrowser_MouseDown);
             // 
             // MainWindow
             // 
