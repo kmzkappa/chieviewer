@@ -217,7 +217,7 @@
             this.contextMenuStripBrowser.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.contextBrowserCopy});
             this.contextMenuStripBrowser.Name = "contextMenuStripBrowser";
-            this.contextMenuStripBrowser.Size = new System.Drawing.Size(153, 48);
+            this.contextMenuStripBrowser.Size = new System.Drawing.Size(114, 26);
             this.contextMenuStripBrowser.Opened += new System.EventHandler(this.contextMenuStripBrowser_Opened);
             // 
             // contextBrowserCopy
@@ -404,8 +404,10 @@
             // 
             this.tabBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabBrowser.Location = new System.Drawing.Point(0, 0);
+            this.tabBrowser.Multiline = true;
             this.tabBrowser.Name = "tabBrowser";
             this.tabBrowser.SelectedIndex = 0;
+            this.tabBrowser.ShowToolTips = true;
             this.tabBrowser.Size = new System.Drawing.Size(1034, 406);
             this.tabBrowser.TabIndex = 0;
             this.tabBrowser.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tabBrowser_MouseDown);

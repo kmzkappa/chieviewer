@@ -420,7 +420,18 @@ namespace chieviewer
         // タブ部分のマウス処理
         private void tabBrowser_MouseDown(object sender, MouseEventArgs e)
         {
-
+            if(e.Button == MouseButtons.Middle)
+            {
+                for (int i = 0; i < tabBrowser.TabCount; i++)
+                {
+                    //タブとマウス位置を比較し、クリックしたタブを選択
+                    if (tabBrowser.GetTabRect(i).Contains(e.X, e.Y))
+                    {
+                        tabBrowser.TabPages.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
         }
 
         /***********************************************************/
@@ -640,6 +651,7 @@ namespace chieviewer
             }
         }
 
+        // ブラウザの右クリックメニュー「コピー」処理
         private void contextBrowserCopy_Click(object sender, EventArgs e)
         {
             ContextMenuStrip strip = ((ToolStripMenuItem)sender).Owner as ContextMenuStrip;
