@@ -496,12 +496,46 @@ namespace chieviewer
         // 一覧部分の更新（新着記事用）
         private void UpdateListViewArticles(Api.getNewQuestionList.ResultSet resultSet)
         {
+            DataBase db = new DataBase();
+            var ngWords = db.GetNgWordList(DataBase.NgType.Word);
+
             listViewArticles.Items.Clear();
             foreach(var result in resultSet.Result)
             {
+                bool skip = false;
+
+                string contentText = WebUtility.HtmlDecode(result.Content);
+
+                // NGワードチェック
+                foreach (var ng in ngWords)
+                {
+                    if (ng.Regex)
+                    {
+                        // NGワード（正規表現）に引っかかった場合
+                        Regex regex = new Regex(ng.Word);
+                        if (regex.IsMatch(contentText))
+                        {
+                            skip = true;
+                            break;
+                        }
+
+                    }
+                    else
+                    {
+                        // NGワードに引っかかった場合
+                        if (contentText.Contains(ng.Word))
+                        {
+                            skip = true;
+                            break;
+                        }
+                    }
+                }
+                // NGワードに引っかかった
+                if (skip) continue;
+
                 ListViewItem item = new ListViewItem(result.QuestionId);
 
-                item.SubItems.Add(WebUtility.HtmlDecode(result.Content));
+                item.SubItems.Add(contentText);
                 // 知恵コイン
                 item.SubItems.Add(result.Coin);
                 // 回答数
@@ -545,9 +579,43 @@ namespace chieviewer
         // 一覧部分の更新（検索時用）
         private void UpdateListViewArticles(Api.questionSearchResponse.ResultSet resultSet)
         {
+            DataBase db = new DataBase();
+            var ngWords = db.GetNgWordList(DataBase.NgType.Word);
+
             listViewArticles.Items.Clear();
             foreach (var result in resultSet.Result)
             {
+                bool skip = false;
+
+                string contentText = WebUtility.HtmlDecode(result.Content);
+
+                // NGワードチェック
+                foreach (var ng in ngWords)
+                {
+                    if (ng.Regex)
+                    {
+                        // NGワード（正規表現）に引っかかった場合
+                        Regex regex = new Regex(ng.Word);
+                        if (regex.IsMatch(contentText))
+                        {
+                            skip = true;
+                            break;
+                        }
+
+                    }
+                    else
+                    {
+                        // NGワードに引っかかった場合
+                        if (contentText.Contains(ng.Word))
+                        {
+                            skip = true;
+                            break;
+                        }
+                    }
+                }
+                // NGワードに引っかかった
+                if (skip) continue;
+
                 ListViewItem item = new ListViewItem(result.Id);
                 item.SubItems.Add(result.Content);
 
