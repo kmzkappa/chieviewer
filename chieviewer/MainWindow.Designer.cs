@@ -44,8 +44,13 @@
             this.categoryTree = new System.Windows.Forms.TreeView();
             this.imageListCategory = new System.Windows.Forms.ImageList(this.components);
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.tabBrowser = new System.Windows.Forms.TabControl();
             this.contextMenuStripBrowser = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextBrowserSelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.contextBrowserCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.contextBrowserAddNgName = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextBrowserAddNgWord = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
             this.statusStripMainText = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
@@ -63,7 +68,6 @@
             this.toolStripComboBoxLevel3 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripTextBoxSearchQuery = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButtonSearch = new System.Windows.Forms.ToolStripButton();
-            this.tabBrowser = new System.Windows.Forms.TabControl();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -212,20 +216,65 @@
             this.splitContainer2.SplitterDistance = 306;
             this.splitContainer2.TabIndex = 3;
             // 
+            // tabBrowser
+            // 
+            this.tabBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabBrowser.Location = new System.Drawing.Point(0, 0);
+            this.tabBrowser.Multiline = true;
+            this.tabBrowser.Name = "tabBrowser";
+            this.tabBrowser.SelectedIndex = 0;
+            this.tabBrowser.ShowToolTips = true;
+            this.tabBrowser.Size = new System.Drawing.Size(1034, 406);
+            this.tabBrowser.TabIndex = 0;
+            this.tabBrowser.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tabBrowser_MouseDown);
+            // 
             // contextMenuStripBrowser
             // 
             this.contextMenuStripBrowser.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.contextBrowserCopy});
+            this.contextBrowserSelectAll,
+            this.contextBrowserCopy,
+            this.toolStripSeparator3,
+            this.contextBrowserAddNgName,
+            this.contextBrowserAddNgWord});
             this.contextMenuStripBrowser.Name = "contextMenuStripBrowser";
-            this.contextMenuStripBrowser.Size = new System.Drawing.Size(114, 26);
+            this.contextMenuStripBrowser.Size = new System.Drawing.Size(184, 120);
             this.contextMenuStripBrowser.Opened += new System.EventHandler(this.contextMenuStripBrowser_Opened);
+            // 
+            // contextBrowserSelectAll
+            // 
+            this.contextBrowserSelectAll.Name = "contextBrowserSelectAll";
+            this.contextBrowserSelectAll.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
+            this.contextBrowserSelectAll.Size = new System.Drawing.Size(183, 22);
+            this.contextBrowserSelectAll.Text = "すべて選択(&A)";
             // 
             // contextBrowserCopy
             // 
             this.contextBrowserCopy.Name = "contextBrowserCopy";
-            this.contextBrowserCopy.Size = new System.Drawing.Size(152, 22);
+            this.contextBrowserCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.contextBrowserCopy.Size = new System.Drawing.Size(183, 22);
             this.contextBrowserCopy.Text = "コピー(&C)";
             this.contextBrowserCopy.Click += new System.EventHandler(this.contextBrowserCopy_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(180, 6);
+            // 
+            // contextBrowserAddNgName
+            // 
+            this.contextBrowserAddNgName.Name = "contextBrowserAddNgName";
+            this.contextBrowserAddNgName.Size = new System.Drawing.Size(183, 22);
+            this.contextBrowserAddNgName.Text = "NGネームに追加(&N)";
+            this.contextBrowserAddNgName.ToolTipText = "選択した単語をNGネームに追加します。\r\nNGネームに追加したユーザーが投稿した質問は、詳細を表示することができなくなります。";
+            this.contextBrowserAddNgName.Click += new System.EventHandler(this.contextBrowserAddNgName_Click);
+            // 
+            // contextBrowserAddNgWord
+            // 
+            this.contextBrowserAddNgWord.Name = "contextBrowserAddNgWord";
+            this.contextBrowserAddNgWord.Size = new System.Drawing.Size(183, 22);
+            this.contextBrowserAddNgWord.Text = "NGワードに追加(&W)";
+            this.contextBrowserAddNgWord.ToolTipText = "選択した単語をNGワードに追加します。\r\nNGワードが含まれる質問は、一覧に表示されなくなります。";
+            this.contextBrowserAddNgWord.Click += new System.EventHandler(this.contextTbowserAddNgWord_Click);
             // 
             // statusStripMain
             // 
@@ -400,18 +449,6 @@
             this.toolStripButtonSearch.ToolTipText = "指定されたカテゴリ(大分類～小分類)およびキーワードに合致する質問を検索します。";
             this.toolStripButtonSearch.Click += new System.EventHandler(this.toolStripButtonSearch_Click);
             // 
-            // tabBrowser
-            // 
-            this.tabBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabBrowser.Location = new System.Drawing.Point(0, 0);
-            this.tabBrowser.Multiline = true;
-            this.tabBrowser.Name = "tabBrowser";
-            this.tabBrowser.SelectedIndex = 0;
-            this.tabBrowser.ShowToolTips = true;
-            this.tabBrowser.Size = new System.Drawing.Size(1034, 406);
-            this.tabBrowser.TabIndex = 0;
-            this.tabBrowser.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tabBrowser_MouseDown);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -482,6 +519,10 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ImageList imageListCategory;
         private System.Windows.Forms.TabControl tabBrowser;
+        private System.Windows.Forms.ToolStripMenuItem contextBrowserSelectAll;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem contextBrowserAddNgName;
+        private System.Windows.Forms.ToolStripMenuItem contextBrowserAddNgWord;
     }
 }
 

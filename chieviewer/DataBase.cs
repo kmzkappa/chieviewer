@@ -34,6 +34,13 @@ namespace chieviewer
                     cmd.CommandText += ");";
                     cmd.ExecuteNonQuery();
                 }
+                using (SQLiteCommand cmd = dbconn.CreateCommand())
+                {
+                    cmd.CommandText = "create table ng_list(";
+                    cmd.CommandText += "id INTEGER PRIMARY KEY, type INTEGER, word TEXT";
+                    cmd.CommandText += ");";
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -195,6 +202,35 @@ namespace chieviewer
                 }
             }
             return categoryList;
+        }
+
+        // NGワード・ネーム登録
+        // type: 1=名前、2=単語
+        public void AddNgWord(NgType type, string word)
+        {
+            using (SQLiteConnection dbconn = new SQLiteConnection("data Source=" + DbFileName))
+            {
+                dbconn.Open();
+
+                using (var transaction = dbconn.BeginTransaction())
+                {
+                    using (SQLiteCommand cmd = dbconn.CreateCommand())
+                    {
+                        cmd.CommandText = "insert into ng_list(type, word) ";
+                        cmd.CommandText += "values (@TYPE, @WORD);";
+                        cmd.Parameters.Add(new SQLiteParameter("@TYPE", type));
+                        cmd.Parameters.Add(new SQLiteParameter("@WORD", word));
+                        cmd.ExecuteNonQuery();
+                    }
+                    transaction.Commit();
+                }
+            }
+        }
+
+        public enum NgType
+        {
+            Name = 1,
+            Word = 2
         }
     }
 }

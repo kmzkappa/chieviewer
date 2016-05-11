@@ -671,11 +671,6 @@ namespace chieviewer
         {
             WebBrowser browser = ((ContextMenuStrip)sender).SourceControl as WebBrowser;
 
-            // すべて選択
-            //brsArticle.Document.ExecCommand("SelectAll", false, null);
-            // コピー
-            //browser.Document.ExecCommand("Copy", false, null);
-
             // 文字列が選択されていなければ「コピー」を無効化する
             IHTMLDocument2 htmlDocument = browser.Document.DomDocument as IHTMLDocument2;
             IHTMLSelectionObject currentSelection = htmlDocument.selection;
@@ -685,10 +680,14 @@ namespace chieviewer
                 if (range.text == null)
                 {
                     contextBrowserCopy.Enabled = false;
+                    contextBrowserAddNgName.Enabled = false;
+                    contextBrowserAddNgWord.Enabled = false;
                 }
                 else
                 {
                     contextBrowserCopy.Enabled = true;
+                    contextBrowserAddNgName.Enabled = true;
+                    contextBrowserAddNgWord.Enabled = true;
                 }
             }
         }
@@ -699,6 +698,52 @@ namespace chieviewer
             ContextMenuStrip strip = ((ToolStripMenuItem)sender).Owner as ContextMenuStrip;
             WebBrowser browser = strip.SourceControl as WebBrowser;
             browser.Document.ExecCommand("Copy", false, null);
+        }
+
+        // ブラウザの右クリックメニュー「NGワードに追加」
+        private void contextTbowserAddNgWord_Click(object sender, EventArgs e)
+        {
+            ContextMenuStrip strip = ((ToolStripMenuItem)sender).Owner as ContextMenuStrip;
+            WebBrowser browser = strip.SourceControl as WebBrowser;
+            IHTMLDocument2 htmlDocument = browser.Document.DomDocument as IHTMLDocument2;
+            IHTMLSelectionObject currentSelection = htmlDocument.selection;
+            IHTMLTxtRange range = currentSelection.createRange() as IHTMLTxtRange;
+
+            // 確認ダイアログ表示
+            DialogResult result = MessageBox.Show(
+                $"「{range.text}」をNGワードに追加しますか？",
+                "NGワード追加",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if(result == DialogResult.Yes)
+            {
+                DataBase db = new DataBase();
+                db.AddNgWord(DataBase.NgType.Word, range.text);
+            }
+        }
+
+        // ブラウザの右クリックメニュー「NGネームに追加」
+        private void contextBrowserAddNgName_Click(object sender, EventArgs e)
+        {
+            ContextMenuStrip strip = ((ToolStripMenuItem)sender).Owner as ContextMenuStrip;
+            WebBrowser browser = strip.SourceControl as WebBrowser;
+            IHTMLDocument2 htmlDocument = browser.Document.DomDocument as IHTMLDocument2;
+            IHTMLSelectionObject currentSelection = htmlDocument.selection;
+            IHTMLTxtRange range = currentSelection.createRange() as IHTMLTxtRange;
+
+            // 確認ダイアログ表示
+            DialogResult result = MessageBox.Show(
+                $"「{range.text}」をNGネームに追加しますか？",
+                "NGネーム追加",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                DataBase db = new DataBase();
+                db.AddNgWord(DataBase.NgType.Word, range.text);
+            }
         }
 
 
@@ -964,7 +1009,6 @@ namespace chieviewer
         {
             return statusStripMainText;
         }
-
 
     }
 }
