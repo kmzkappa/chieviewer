@@ -101,6 +101,19 @@ namespace chieviewer
         {
             string questionId = ((ListView)sender).SelectedItems[0].Text;
 
+            // 既にタブに存在する記事の場合、タブを追加せずそれを表示する
+            for (int i = 0; i < tabBrowser.TabCount; i++)
+            {
+                if(((Dictionary<string, string>)tabBrowser.TabPages[i].Tag)["QuestionId"] == questionId)
+                {
+                    tabBrowser.SelectTab(i);
+                    toolStripTextBoxQuestionId.ForeColor = Color.Black;
+                    toolStripTextBoxQuestionId.Text =
+                        ((Dictionary<string, string>)tabBrowser.TabPages[i].Tag)["PcQuestionUrl"];
+                    return;
+                }
+            }
+
             await GetArticleDetail(questionId);
 
             await Task.Delay(500);
@@ -133,6 +146,16 @@ namespace chieviewer
             }
 
             if (string.IsNullOrEmpty(questionId)) return;
+
+            // 既にタブに存在する記事の場合、タブを追加せずそれを表示する
+            for (int i = 0; i < tabBrowser.TabCount; i++)
+            {
+                if (((Dictionary<string, string>)tabBrowser.TabPages[i].Tag)["QuestionId"] == questionId)
+                {
+                    tabBrowser.SelectTab(i);
+                    return;
+                }
+            }
 
             await GetArticleDetail(questionId);
         }
@@ -424,10 +447,24 @@ namespace chieviewer
             {
                 for (int i = 0; i < tabBrowser.TabCount; i++)
                 {
-                    //タブとマウス位置を比較し、クリックしたタブを選択
+                    // タブとマウス位置を比較し、クリックしたタブを除去
                     if (tabBrowser.GetTabRect(i).Contains(e.X, e.Y))
                     {
                         tabBrowser.TabPages.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
+            else if(e.Button == MouseButtons.Left)
+            {
+                for (int i = 0; i < tabBrowser.TabCount; i++)
+                {
+                    // 選択したタブのURLを取り出してURLボックスに反映する
+                    if (tabBrowser.GetTabRect(i).Contains(e.X, e.Y))
+                    {
+                        toolStripTextBoxQuestionId.ForeColor = Color.Black;
+                        toolStripTextBoxQuestionId.Text =
+                            ((Dictionary<string, string>)tabBrowser.TabPages[i].Tag)["PcQuestionUrl"];
                         break;
                     }
                 }
@@ -613,8 +650,13 @@ namespace chieviewer
             browser.ContextMenuStrip.Opened += new EventHandler(contextMenuStripBrowser_Opened);
 
             TabPage tab = new TabPage();
-            // 質問ID
-            tab.Tag = resultSet.Result.QuestionId;
+            // 質問ID, URL
+            tab.Tag = new Dictionary<string, string>()
+            {
+                {"QuestionId", resultSet.Result.QuestionId},
+                {"PcQuestionUrl", resultSet.Result.PcQuestionUrl}
+            };
+
             tab.Text = resultSet.Result.Title.Substring(0, 8);
             tab.Controls.Add(browser);
             tabBrowser.TabPages.Add(tab);
