@@ -68,6 +68,12 @@
             this.toolStripComboBoxLevel3 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripTextBoxSearchQuery = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButtonSearch = new System.Windows.Forms.ToolStripButton();
+            this.ファイルFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ツールTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemOption = new System.Windows.Forms.ToolStripMenuItem();
+            this.カテゴリCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.カテゴリツリー更新RToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chieViewerの終了XToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -237,7 +243,7 @@
             this.contextBrowserAddNgName,
             this.contextBrowserAddNgWord});
             this.contextMenuStripBrowser.Name = "contextMenuStripBrowser";
-            this.contextMenuStripBrowser.Size = new System.Drawing.Size(184, 120);
+            this.contextMenuStripBrowser.Size = new System.Drawing.Size(184, 98);
             this.contextMenuStripBrowser.Opened += new System.EventHandler(this.contextMenuStripBrowser_Opened);
             // 
             // contextBrowserSelectAll
@@ -284,7 +290,6 @@
             this.statusStripMain.Location = new System.Drawing.Point(0, 769);
             this.statusStripMain.Name = "statusStripMain";
             this.statusStripMain.Size = new System.Drawing.Size(1224, 22);
-            this.statusStripMain.SizingGrip = false;
             this.statusStripMain.TabIndex = 3;
             this.statusStripMain.Text = "a";
             // 
@@ -298,12 +303,16 @@
             // toolStripProgressBar
             // 
             this.toolStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripProgressBar.Margin = new System.Windows.Forms.Padding(1, 3, 10, 3);
             this.toolStripProgressBar.Name = "toolStripProgressBar";
             this.toolStripProgressBar.Size = new System.Drawing.Size(100, 16);
             // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ファイルFToolStripMenuItem,
+            this.カテゴリCToolStripMenuItem,
+            this.ツールTToolStripMenuItem,
             this.ヘルプHToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -449,6 +458,49 @@
             this.toolStripButtonSearch.ToolTipText = "指定されたカテゴリ(大分類～小分類)およびキーワードに合致する質問を検索します。";
             this.toolStripButtonSearch.Click += new System.EventHandler(this.toolStripButtonSearch_Click);
             // 
+            // ファイルFToolStripMenuItem
+            // 
+            this.ファイルFToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.chieViewerの終了XToolStripMenuItem});
+            this.ファイルFToolStripMenuItem.Name = "ファイルFToolStripMenuItem";
+            this.ファイルFToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
+            this.ファイルFToolStripMenuItem.Text = "ファイル(&F)";
+            // 
+            // ツールTToolStripMenuItem
+            // 
+            this.ツールTToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemOption});
+            this.ツールTToolStripMenuItem.Name = "ツールTToolStripMenuItem";
+            this.ツールTToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
+            this.ツールTToolStripMenuItem.Text = "ツール(&T)";
+            // 
+            // toolStripMenuItemOption
+            // 
+            this.toolStripMenuItemOption.Name = "toolStripMenuItemOption";
+            this.toolStripMenuItemOption.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItemOption.Text = "オプション(&O)";
+            this.toolStripMenuItemOption.Click += new System.EventHandler(this.toolStripMenuItemOption_Click);
+            // 
+            // カテゴリCToolStripMenuItem
+            // 
+            this.カテゴリCToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.カテゴリツリー更新RToolStripMenuItem});
+            this.カテゴリCToolStripMenuItem.Name = "カテゴリCToolStripMenuItem";
+            this.カテゴリCToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
+            this.カテゴリCToolStripMenuItem.Text = "カテゴリ(&C)";
+            // 
+            // カテゴリツリー更新RToolStripMenuItem
+            // 
+            this.カテゴリツリー更新RToolStripMenuItem.Name = "カテゴリツリー更新RToolStripMenuItem";
+            this.カテゴリツリー更新RToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.カテゴリツリー更新RToolStripMenuItem.Text = "カテゴリツリー更新(&R)";
+            // 
+            // chieViewerの終了XToolStripMenuItem
+            // 
+            this.chieViewerの終了XToolStripMenuItem.Name = "chieViewerの終了XToolStripMenuItem";
+            this.chieViewerの終了XToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.chieViewerの終了XToolStripMenuItem.Text = "Chie Viewerの終了(&X)";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -523,6 +575,12 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem contextBrowserAddNgName;
         private System.Windows.Forms.ToolStripMenuItem contextBrowserAddNgWord;
+        private System.Windows.Forms.ToolStripMenuItem ファイルFToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem chieViewerの終了XToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem カテゴリCToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem カテゴリツリー更新RToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ツールTToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemOption;
     }
 }
 

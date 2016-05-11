@@ -474,9 +474,18 @@ namespace chieviewer
         /***********************************************************/
         /* メニューバー */
         /***********************************************************/
+
+        // 「バージョン情報」
         private void toolStripMenuItemVersionInfo_Click(object sender, EventArgs e)
         {
             VersionInfoForm form = new VersionInfoForm();
+            form.ShowDialog();
+        }
+
+        // 「オプション」
+        private void toolStripMenuItemOption_Click(object sender, EventArgs e)
+        {
+            OptionForm form = new OptionForm();
             form.ShowDialog();
         }
 
@@ -657,7 +666,14 @@ namespace chieviewer
                 {"PcQuestionUrl", resultSet.Result.PcQuestionUrl}
             };
 
-            tab.Text = resultSet.Result.Title.Substring(0, 8);
+            if(resultSet.Result.Title.Length > 8)
+            {
+                tab.Text = resultSet.Result.Title.Substring(0, 8);
+            }
+            else
+            {
+                tab.Text = resultSet.Result.Title;
+            }
             tab.Controls.Add(browser);
             tabBrowser.TabPages.Add(tab);
             // 追加したタブを表示

@@ -37,7 +37,7 @@ namespace chieviewer
                 using (SQLiteCommand cmd = dbconn.CreateCommand())
                 {
                     cmd.CommandText = "create table ng_list(";
-                    cmd.CommandText += "id INTEGER PRIMARY KEY, type INTEGER, word TEXT";
+                    cmd.CommandText += "id INTEGER PRIMARY KEY, type INTEGER, word TEXT, regex BOOLEAN";
                     cmd.CommandText += ");";
                     cmd.ExecuteNonQuery();
                 }
@@ -206,8 +206,9 @@ namespace chieviewer
 
         // NGワード・ネーム登録
         // type: 1=名前、2=単語
-        public void AddNgWord(NgType type, string word)
+        public Int64 AddNgWord(NgType type, string word, bool useRegex = false)
         {
+            Int64 lastInsertRowId = -1;
             using (SQLiteConnection dbconn = new SQLiteConnection("data Source=" + DbFileName))
             {
                 dbconn.Open();
@@ -216,10 +217,84 @@ namespace chieviewer
                 {
                     using (SQLiteCommand cmd = dbconn.CreateCommand())
                     {
-                        cmd.CommandText = "insert into ng_list(type, word) ";
-                        cmd.CommandText += "values (@TYPE, @WORD);";
+                        cmd.CommandText = "insert into ng_list(type, word, regex) ";
+                        cmd.CommandText += "values (@TYPE, @WORD, @REGEX);";
                         cmd.Parameters.Add(new SQLiteParameter("@TYPE", type));
                         cmd.Parameters.Add(new SQLiteParameter("@WORD", word));
+                        cmd.Parameters.Add(new SQLiteParameter("@REGEX", useRegex));
+                        cmd.ExecuteNonQuery();
+                    }
+                    transaction.Commit();
+                }
+
+                using (SQLiteCommand cmd = dbconn.CreateCommand())
+                {
+                    cmd.CommandText = @"select last_insert_rowid()";
+                    lastInsertRowId = (Int64)cmd.ExecuteScalar();
+                }
+            }
+            return lastInsertRowId;
+        }
+
+        public void UpdateNgWord(NgType type, int id, string word, bool useRegex)
+        {
+            using (SQLiteConnection dbconn = new SQLiteConnection("data Source=" + DbFileName))
+            {
+                dbconn.Open();
+                using (var transaction = dbconn.BeginTransaction())
+                {
+                    using (SQLiteCommand cmd = dbconn.CreateCommand())
+                    {
+                        cmd.CommandText = "update ng_list set word=@WORD, regex=@REGEX where id=@ID;";
+                        cmd.Parameters.Add(new SQLiteParameter("@WORD", word));
+                        cmd.Parameters.Add(new SQLiteParameter("@REGEX", useRegex));
+                        cmd.Parameters.Add(new SQLiteParameter("@ID", id));
+                        cmd.ExecuteNonQuery();
+                    }
+                    transaction.Commit();
+                }
+            }
+        }
+
+        public List<NgListModel> GetNgWordList(NgType type)
+        {
+            List<NgListModel> ngList = new List<NgListModel>();
+
+            using (SQLiteConnection dbconn = new SQLiteConnection("data Source=" + DbFileName))
+            {
+                dbconn.Open();
+                using (SQLiteCommand cmd = dbconn.CreateCommand())
+                {
+                    cmd.CommandText = "select * from ng_list where type=@TYPE;";
+                    cmd.Parameters.Add(new SQLiteParameter("@TYPE", (int)type));
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        NgListModel model = new NgListModel();
+                        model.Id = int.Parse(reader["id"].ToString());
+                        model.Type = int.Parse((reader["type"].ToString()));
+                        model.Word = reader["word"].ToString();
+                        model.Regex = (bool)reader["regex"];
+                        ngList.Add(model);
+                    }
+                }
+            }
+            return ngList;
+        }
+
+        public void DeleteNgWordList(NgType type, int pk)
+        {
+            using (SQLiteConnection dbconn = new SQLiteConnection("data Source=" + DbFileName))
+            {
+                dbconn.Open();
+                using (var transaction = dbconn.BeginTransaction())
+                {
+
+                    using (SQLiteCommand cmd = dbconn.CreateCommand())
+                    {
+                        cmd.CommandText = "delete from ng_list where type=@TYPE and id=@ID";
+                        cmd.Parameters.Add(new SQLiteParameter("@TYPE", (int)type));
+                        cmd.Parameters.Add(new SQLiteParameter("@ID", pk));
                         cmd.ExecuteNonQuery();
                     }
                     transaction.Commit();
