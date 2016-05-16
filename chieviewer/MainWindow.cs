@@ -13,6 +13,8 @@ using System.IO;
 using mshtml;
 using System.Text.RegularExpressions;
 using System.Net;
+using System.Net.Http;
+
 
 namespace chieviewer
 {
@@ -48,10 +50,29 @@ namespace chieviewer
             for(int i = 0; i < 2; i++)
             {
                 WebBrowser browser = new WebBrowser();
-                browser.DocumentText = htmlTemplate;
+                //browser.DocumentText = htmlTemplate;
                 browsers.Add(browser);
             }
 
+
+            // デフォルトではIE7モードで動作するため、これをIE9モードに変更する
+            string FEATURE_BROWSER_EMULATION = @"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION";
+            string FEATURE_DOCUMENT_COMPATIBLE_MODE = @"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_DOCUMENT_COMPATIBLE_MODE";
+#if DEBUG
+            string exename = "chieviewer.vshost.exe";
+#else
+            string exename = "chieviewer.exe";
+#endif
+            Microsoft.Win32.RegistryKey regkey1 =
+                Microsoft.Win32.Registry.CurrentUser.CreateSubKey(FEATURE_BROWSER_EMULATION);
+            Microsoft.Win32.RegistryKey regkey2 =
+                Microsoft.Win32.Registry.CurrentUser.CreateSubKey(FEATURE_DOCUMENT_COMPATIBLE_MODE);
+            // ユーザーエージェントをIE9に
+            regkey1.SetValue(exename, 9000, Microsoft.Win32.RegistryValueKind.DWord);
+            // レンダリングモードをIE9に
+            regkey2.SetValue(exename, 90000, Microsoft.Win32.RegistryValueKind.DWord);
+            regkey1.Close();
+            regkey2.Close();
         }
 
         // MainWindow_Load完了後の処理
@@ -114,10 +135,224 @@ namespace chieviewer
                 }
             }
 
-            await GetArticleDetail(questionId);
+            // APIを使用して記事を取得する場合
+            // await GetArticleDetail(questionId);
 
-            await Task.Delay(500);
+            /***********************/
+            string url = ((Dictionary<string, string>)((ListView)sender).SelectedItems[0].Tag)["PcQuestionUrl"];
+            // リダイレクト用のURLを直接記事のURL変更する
+            url = url.Replace("rd", @"qa/question_detail");
+            //string html = await GetArticleDetailHtml(url);
+            //url = "http://www.ugtop.com/spill.shtml";
+            //browsers[1].DocumentText = htmlTemplate;
+            WebBrowser browser = browsers[0];
+            browsers.RemoveAt(0);
+            browsers.Add(new WebBrowser());
+            browser.Dock = DockStyle.Fill;
+
+            //browser.AllowWebBrowserDrop = false;
+
+
+            //browser.IsWebBrowserContextMenuEnabled = false;
+            browser.ContextMenuStrip = contextMenuStripBrowser;
+
+            // ブラウザ部分の右クリックメニューを設定
+            //browser.ContextMenuStrip.Opened += new EventHandler(contextMenuStripBrowser_Opened);
+
+            browser.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(browser_DocumentCompleted);
+
+            //browser.DocumentText = html;
+            //browser.ScriptErrorsSuppressed = true;
+            //browser.enabl
+            browser.Navigate(new Uri(url));
+
+
+
+            
+            
+
+            //TabPage tab = new TabPage();
+            // 質問ID, URL
+            //tab.Tag = new Dictionary<string, string>()
+            //{
+            //    {"QuestionId", resultSet.Result.QuestionId},
+            //    {"PcQuestionUrl", resultSet.Result.PcQuestionUrl}
+            //};
+
+            //if (resultSet.Result.Title.Length > 8)
+            //{
+            //    tab.Text = resultSet.Result.Title.Substring(0, 8);
+            //}
+            //else
+            //{
+            //    tab.Text = resultSet.Result.Title;
+            //}
+            //tab.Controls.Add(browser);
+
+
+            //tabBrowser.TabPages.Add(tab);
+            // 追加したタブを表示
+            //tabBrowser.SelectedIndex = tabBrowser.TabCount - 1;
+            /***********************/
+
+
+
+
+
+
+
+            //await Task.Delay(500);
+            //toolStripProgressBar.Value = 0;
+
+
+        }
+
+        private void browser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            const string styleNone = "display: none;";
+            WebBrowser browser = sender as WebBrowser;
+            
+            HtmlElementCollection document = browser.Document.All;
+
+
+            //WebBrowserController webCtrl;
+            //webCtrl = new WebBrowserController(browser);
+            //webCtrl.DlControl = webCtrl.DlControl & DLCTL.DLIMAGES;
+            
+
+            if (browser.ReadyState != WebBrowserReadyState.Complete) return;
+
+            TabPage tab = new TabPage();
+            // メニュータブ、パンくずリストなど
+            browser.Document.GetElementById("header").Style = styleNone;
+            // サイドバー
+            if(browser.Document.GetElementById("sub") != null)
+            {
+                browser.Document.GetElementById("sub").Style = styleNone;
+            }
+            // 質問下の広告
+            browser.Document.GetElementById("chie-ams").Style = styleNone;
+            // Q&Aをキーワードで検索
+            browser.Document.GetElementById("mainSearchWrap").Style = styleNone;
+            // Yayoo!検索で調べてみよう
+            if (browser.Document.GetElementById("yjSLink") != null)
+            {
+                browser.Document.GetElementById("yjSLink").Style = styleNone;
+            }
+            // footer
+            browser.Document.GetElementById("footer").Style = styleNone;
+
+            browser.Document.GetElementById("main").Style = $"font-size: 80%;";
+            
+            foreach (HtmlElement elem in document)
+            {
+                string className = elem.GetAttribute("className").ToString();
+                // 質問者の質問
+                if (className == "usrQstn")
+                {
+                    //elem.Style = "width: inherit;";
+                }
+                // 回答受付終了まであとX日
+                else if (className == "mdSttsMssg")
+                {
+                    elem.Style = styleNone;
+                }
+                // facebook, twitter, hatena
+                else if (className == "shareBtnList")
+                {
+                    elem.Style = styleNone;
+                }
+                // 共感した、閲覧数、回答数、質問を取り消す
+                else if (className == "attInf")
+                {
+                    elem.Style = styleNone;
+                }
+                // ※質問が「投票受付中」「解決済み」になると、回答を取り消すことはできません。
+                else if (className == "pstNt")
+                {
+                    elem.Style = styleNone;
+                }
+                // XXの回答受付中の質問
+                else if (className == "md_listCmmn")
+                {
+                    elem.Style = styleNone;
+                }
+                // この質問につけられたタグ
+                else if (className == "md_listCmmn brdrNn")
+                {
+                    elem.Style = styleNone;
+                }
+                // 悩みや疑問 なんでも気軽にきいちゃおう
+                else if (className == "mdLightForm")
+                {
+                    elem.Style = styleNone;
+                }
+                // ボタン類
+                else if (className == "btLrg" || className == "btAct" || className == "bttn clrfx")
+                {
+                    elem.Style = styleNone;
+                }
+                // 背景
+                // この指定ヤバい
+                else if (className == "mdPstd mdPstdQstn sttsOpn  clrfx")
+                {
+                    elem.Style = "background: none;";
+                }
+                else if (elem.InnerText == "[PR]お得情報")
+                {
+                    elem.Parent.Style = styleNone;
+                }
+                // 広告
+                else if (elem.Id != null && (new Regex("^yads.*")).IsMatch(elem.Id))
+                {
+                    elem.Parent.Style = styleNone;
+                }
+            }
+            
+
+            tab.Controls.Add(browser);
+            tabBrowser.TabPages.Add(tab);
+
+            tabBrowser.SelectedIndex = tabBrowser.TabCount - 1;
+
+            Task.Delay(500);
             toolStripProgressBar.Value = 0;
+        }
+
+
+
+        private async Task<string> GetArticleDetailHtml(string url)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+
+                client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64)");
+                client.DefaultRequestHeaders.Add("Accept-Language", "ja-JP");
+                client.Timeout = TimeSpan.FromSeconds(5.0);
+
+                try
+                {
+                    string result = await client.GetStringAsync(new Uri(url)).ConfigureAwait(false);
+                    return result;
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine("\nError");
+                    Exception ex = e;
+                    while (ex != null)
+                    {
+                        Console.WriteLine("Exception message: {0}", ex.Message);
+                        ex = ex.InnerException;
+                    }
+
+                }
+                catch (TaskCanceledException e)
+                {
+                    Console.WriteLine("\nTimeout");
+                    Console.WriteLine("Exception message: {0}", e.Message);
+                }
+                return null;
+            }
         }
 
 
@@ -571,6 +806,10 @@ namespace chieviewer
                 // 状態
                 item.SubItems.Add("受付中");
 
+                // TagにURLを入れておく
+                Dictionary<string, string> tag = new Dictionary<string, string>() {
+                    {"PcQuestionUrl", result.QuestionUrl} };
+                item.Tag = tag;
 
                 listViewArticles.Items.Add(item);
             }
@@ -688,6 +927,11 @@ namespace chieviewer
                         condition = " "; break;
                 }
                 item.SubItems.Add(condition);
+
+                // TagにURLを入れておく
+                Dictionary<string, string> tag = new Dictionary<string, string>() {
+                    {"PcQuestionUrl", result.Url} };
+                item.Tag = tag;
 
                 listViewArticles.Items.Add(item);
             }
